@@ -1,0 +1,10 @@
+﻿namespace Ilumisoft.ScriptTemplates
+{
+	using UnityEngine;
+	using UnityEditor;
+
+	public class TemplateMenuItems : MonoBehaviour 
+	{
+#MenuItemSection#
+	}
+}

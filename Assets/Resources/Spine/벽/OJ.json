@@ -1,0 +1,67 @@
+{
+"skeleton": {
+	"hash": "e3/Xf/bVlWM",
+	"spine": "4.1.24",
+	"x": -1919.04,
+	"y": 100.25,
+	"width": 2889,
+	"height": 929,
+	"images": "./object/",
+	"audio": "./2_내부오브젝트/"
+},
+"bones": [
+	{ "name": "root" }
+],
+"slots": [
+	{ "name": "다듬기재료1", "bone": "root", "attachment": "다듬기재료1" },
+	{ "name": "생선", "bone": "root", "attachment": "생선" },
+	{ "name": "걸려있는2", "bone": "root", "attachment": "걸려있는2" },
+	{ "name": "걸려있는1", "bone": "root", "attachment": "걸려있는1" },
+	{ "name": "빨래그림자", "bone": "root", "attachment": "빨래그림자" },
+	{ "name": "빨래", "bone": "root", "attachment": "빨래" },
+	{ "name": "창문2bg", "bone": "root", "attachment": "창문2bg" },
+	{ "name": "창문1bg", "bone": "root", "attachment": "창문1bg" },
+	{ "name": "창문2", "bone": "root", "attachment": "창문2" },
+	{ "name": "창문1", "bone": "root", "attachment": "창문1" }
+],
+"skins": [
+	{
+		"name": "default",
+		"attachments": {
+			"걸려있는1": {
+				"걸려있는1": { "x": 167.46, "y": 845.75, "width": 495, "height": 367 }
+			},
+			"걸려있는2": {
+				"걸려있는2": { "x": 562.46, "y": 838.25, "width": 111, "height": 354 }
+			},
+			"다듬기재료1": {
+				"다듬기재료1": { "x": -79.04, "y": 282.75, "width": 632, "height": 245 }
+			},
+			"빨래": {
+				"빨래": { "x": -1440.54, "y": 537.75, "width": 957, "height": 875 }
+			},
+			"빨래그림자": {
+				"빨래그림자": { "x": -1426.54, "y": 683.25, "width": 985, "height": 598 }
+			},
+			"생선": {
+				"생선": { "x": -34.04, "y": 292.25, "width": 178, "height": 54 }
+			},
+			"창문1": {
+				"창문1": { "x": -690.04, "y": 779.25, "width": 338, "height": 274 }
+			},
+			"창문1bg": {
+				"창문1bg": { "x": -687.04, "y": 779.75, "width": 312, "height": 247 }
+			},
+			"창문2": {
+				"창문2": { "x": 792.46, "y": 774.75, "width": 355, "height": 339 }
+			},
+			"창문2bg": {
+				"창문2bg": { "x": 789.46, "y": 762.25, "width": 321, "height": 310 }
+			}
+		}
+	}
+],
+"animations": {
+	"animation": {}
+}
+}

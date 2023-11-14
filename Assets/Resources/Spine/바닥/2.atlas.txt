@@ -1,0 +1,22 @@
+2.png
+size:1967,1056
+filter:Linear,Linear
+pma:true
+긴망석
+bounds:888,528,1077,526
+긴망석 그림자
+bounds:888,2,1075,524
+offsets:1,1,1077,526
+둥근망석
+bounds:445,525,529,441
+rotate:90
+둥근망석 그림자
+bounds:2,525,529,441
+rotate:90
+사각망석
+bounds:2,47,476,406
+rotate:90
+사각망석 그림자
+bounds:410,49,474,404
+offsets:1,1,476,406
+rotate:90

@@ -1,0 +1,7 @@
+J.png
+size:104,133
+filter:Linear,Linear
+pma:true
+짚신발자국
+bounds:2,2,100,129
+offsets:4,1,106,132

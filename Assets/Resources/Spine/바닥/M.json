@@ -1,0 +1,54 @@
+{
+"skeleton": {
+	"hash": "1Amvl94pz34",
+	"spine": "4.1.24",
+	"x": 1619,
+	"y": 64,
+	"width": 236.94,
+	"height": 285.25,
+	"images": "./images/",
+	"audio": ""
+},
+"bones": [
+	{ "name": "root" },
+	{ "name": "bone6", "parent": "root", "x": 1663.69, "y": 123.18 },
+	{ "name": "bone7", "parent": "root", "x": 1811.25, "y": 257.43, "scaleX": -1 }
+],
+"slots": [
+	{ "name": "바닥", "bone": "root" },
+	{ "name": "맨발자국", "bone": "bone6", "attachment": "맨발자국" },
+	{ "name": "맨발자국2", "bone": "bone7", "attachment": "맨발자국" }
+],
+"skins": [
+	{
+		"name": "default",
+		"attachments": {
+			"맨발자국": {
+				"맨발자국": { "x": 1.31, "y": 16.32, "width": 92, "height": 151 }
+			},
+			"맨발자국2": {
+				"맨발자국": { "x": 1.31, "y": 16.32, "width": 92, "height": 151 }
+			}
+		}
+	}
+],
+"animations": {
+	"animation": {
+		"slots": {
+			"맨발자국": {
+				"rgba": [
+					{ "color": "ffffff00" },
+					{ "time": 0.6667, "color": "ffffffff" }
+				]
+			},
+			"맨발자국2": {
+				"rgba": [
+					{ "color": "ffffff00", "curve": "stepped" },
+					{ "time": 1, "color": "ffffff00" },
+					{ "time": 1.6667, "color": "ffffffff" }
+				]
+			}
+		}
+	}
+}
+}

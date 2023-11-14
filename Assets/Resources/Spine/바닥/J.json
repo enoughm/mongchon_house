@@ -1,0 +1,69 @@
+{
+"skeleton": {
+	"hash": "TMl2yWUpuYk",
+	"spine": "4.1.24",
+	"x": 495,
+	"y": 122,
+	"width": 358.15,
+	"height": 164.73,
+	"images": "./images/",
+	"audio": ""
+},
+"bones": [
+	{ "name": "root" },
+	{ "name": "bone5", "parent": "root", "x": 540.32, "y": 186.22 },
+	{ "name": "bone6", "parent": "root", "rotation": -65.5, "x": 723.28, "y": 194.59, "scaleX": -1 }
+],
+"slots": [
+	{ "name": "바닥", "bone": "root" },
+	{ "name": "짚신발자국", "bone": "bone5", "attachment": "짚신발자국" },
+	{ "name": "짚신발자국2", "bone": "bone6", "attachment": "짚신발자국" }
+],
+"skins": [
+	{
+		"name": "default",
+		"attachments": {
+			"짚신발자국": {
+				"짚신발자국": { "x": 7.68, "y": 1.78, "width": 106, "height": 132 }
+			},
+			"짚신발자국2": {
+				"짚신발자국": { "x": 7.68, "y": 1.78, "width": 106, "height": 132 }
+			}
+		}
+	}
+],
+"animations": {
+	"animation": {
+		"slots": {
+			"짚신발자국": {
+				"rgba": [
+					{
+						"color": "ffffff00",
+						"curve": [ 0.111, 1, 0.222, 1, 0.111, 1, 0.222, 1, 0.111, 1, 0.222, 1, 0.111, 0, 0.222, 1 ]
+					},
+					{ "time": 0.3333, "color": "ffffffff" }
+				]
+			},
+			"짚신발자국2": {
+				"rgba": [
+					{ "color": "ffffff00", "curve": "stepped" },
+					{
+						"time": 0.6667,
+						"color": "ffffff00",
+						"curve": [ 0.778, 1, 0.889, 1, 0.778, 1, 0.889, 1, 0.778, 1, 0.889, 1, 0.778, 0, 0.889, 1 ]
+					},
+					{ "time": 1, "color": "ffffffff", "curve": "stepped" },
+					{ "time": 1.6667, "color": "ffffffff" }
+				]
+			}
+		},
+		"bones": {
+			"bone6": {
+				"translate": [
+					{ "x": 49.4, "y": 8.81 }
+				]
+			}
+		}
+	}
+}
+}

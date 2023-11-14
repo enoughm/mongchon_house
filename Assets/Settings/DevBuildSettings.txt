@@ -1,0 +1,15 @@
+{
+    "buildType": "Dev",
+    "defaultCompany": "morm",
+    "productName": "sampleApp",
+    "applicationIdentifier": "com.morm.sample",
+    "useAndroidCustomKeystore": false,
+    "keyaliasPass":"07110711",
+    "keystorePass":"07110711",
+    "androidKeyaliasPass":"07110711",
+    "androidKeystorePass":"07110711",
+    "androidKeystoreName":"Assets/Resources/TobiiOcumenLicense/EyeDR_HMD.keystore",
+    "androidKeyaliasName":"eyedr_hmd",
+    "resolutionWidth" : 1080,
+    "resolutionHeight" : 1920
+}
