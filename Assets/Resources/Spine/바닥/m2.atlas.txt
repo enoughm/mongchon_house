@@ -1,0 +1,9 @@
+m2.png
+size:1081,1056
+filter:Linear,Linear
+pma:true
+긴망석
+bounds:2,528,1077,526
+긴망석 그림자
+bounds:2,2,1075,524
+offsets:1,1,1077,526

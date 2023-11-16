@@ -1,0 +1,8 @@
+m3.png
+size:1064,445
+filter:Linear,Linear
+pma:true
+둥근망석
+bounds:533,2,529,441
+둥근망석 그림자
+bounds:2,2,529,441

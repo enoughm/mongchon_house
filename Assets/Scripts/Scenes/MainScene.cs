@@ -3,28 +3,42 @@ using UnityEngine;
 
 public class MainScene : BaseScene
 {
+    [SerializeField] private LightManager _lightManager;
+    [SerializeField] private BugFactory _bugFactory;
+    
     protected override void Init()
     {
         base.Init();
         SceneType = Define.Scene.Main;
 
         Managers.UI.ShowView<MainView>();
+        
+        _lightManager.ToDark(1);
     }
+
+    private void Start()
+    {
+        _lightManager.ToDark(1);
+    }
+
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Q))
         {
-            PopupState popup = Managers.UI.ShowPopupUI<CommonPopup>().Open(CommonPopup.CommonPopupType.B, "dd", "dddd", 3);
-            popup.OnCancel = p =>
-            {
-                Debug.Log($"OnCancel");
-            };
-        
-            popup.OnOK = p =>
-            {
-                Debug.Log($"OnOK");
-            };
+            _lightManager.ToLight(1);
+        }
+        else if (Input.GetKeyDown(KeyCode.W))
+        {
+            _lightManager.ToDark(1);
+        }
+        else if (Input.GetKeyDown(KeyCode.E))
+        {
+            _bugFactory.MadeBug();
+        }
+        else if (Input.GetKeyDown(KeyCode.R))
+        {
+            _bugFactory.ClearBugs();
         }
     }
 

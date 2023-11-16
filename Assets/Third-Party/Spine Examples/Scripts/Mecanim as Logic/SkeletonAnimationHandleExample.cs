@@ -82,19 +82,23 @@ namespace Spine.Unity.Examples {
 				skeletonAnimation.Skeleton.ScaleX = horizontal > 0 ? 1f : -1f;
 			}
 		}
-
+		
 		/// <summary>Plays an animation based on the state name.</summary>
-		public void PlayAnimationForState (string stateShortName, int layerIndex) {
-			PlayAnimationForState(StringToHash(stateShortName), layerIndex);
+		public Animation PlayAnimationForState (string stateShortName, int layerIndex, float timeLimit = 0f) {
+			return PlayAnimationForState(StringToHash(stateShortName), layerIndex, timeLimit);
 		}
 
 		/// <summary>Plays an animation based on the hash of the state name.</summary>
-		public void PlayAnimationForState (int shortNameHash, int layerIndex) {
+		public Animation PlayAnimationForState (int shortNameHash, int layerIndex, float timeLimit = 0f) {
 			Animation foundAnimation = GetAnimationForState(shortNameHash);
 			if (foundAnimation == null)
-				return;
+				return null;
+			
+			if (timeLimit > 0)
+				foundAnimation.Duration = timeLimit;
 
 			PlayNewAnimation(foundAnimation, layerIndex);
+			return foundAnimation;
 		}
 
 		/// <summary>Gets a Spine Animation based on the state name.</summary>

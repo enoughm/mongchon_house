@@ -32,7 +32,9 @@ MonoBehaviour:
     assemblyNames:
     - Assembly-CSharp
     - Assembly-CSharp-firstpass
+    - Flexalon
     - Hierarchy2.Runtime
+    - NavMeshPlus
     - spine-csharp
     - spine-unity
     - spine-unity-examples

@@ -1,0 +1,11 @@
+m1.png
+size:816,480
+filter:Linear,Linear
+pma:true
+사각망석
+bounds:2,2,476,406
+rotate:90
+사각망석 그림자
+bounds:410,4,474,404
+offsets:1,1,476,406
+rotate:90
