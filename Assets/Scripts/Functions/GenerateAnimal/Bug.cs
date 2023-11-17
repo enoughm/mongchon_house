@@ -14,26 +14,24 @@ public class Bug : MonoBehaviour
         InSeat,
         OutSeat,
         RandomMove,
-        Step,
         Exiting,
         Die,
     }
 
-    [Header("Components")]
-    [SerializeField] Transform randomMoveCenter;
-    [SerializeField] SkeletonAnimation skeletonAnimation;
-    [SerializeField] SkeletonAnimationHandleExample seatAnimationHandler;
-    [SerializeField] GameObject dustPrefab;
-
-    [Header("Options")] 
-    public float enterSpeed = 7f;
-    public float outSeatSpeed = 5;
-    public float randomMoveRange = 8;
-    public float randomMoveDuration = 60f;
-    
     [Header("Update Values (일회성)")]
     public bool isStep = false;
     
+    [Header("Components")]
+    [SerializeField] Transform randomMoveCenter;
+    [SerializeField] Transform[] exitTr;
+
+    [Header("Options")] 
+    public float enterSpeed = 7f;
+    public float exitSpeed = 7f;
+    public float outSeatSpeed = 5;
+    public float randomMoveRange = 8;
+    public float randomMoveDuration = 60f;
+
     [Header("Event")]
     public Action OnDie;
     
@@ -73,8 +71,8 @@ public class Bug : MonoBehaviour
     {
         if (_prevState != _curState)
         {
-            _prevState = _curState;
             Debug.Log($"State Changed : from [{_prevState}] to [{_curState}]");
+            _prevState = _curState;
             switch (_curState)
             {
                 case State.None:
@@ -89,21 +87,21 @@ public class Bug : MonoBehaviour
                 case State.RandomMove:
                     EnterState_RandomMove();
                     break;
-                case State.Step:
-                    break;
                 case State.Exiting:
+                    EnterState_Exiting();
                     break;
                 case State.Die:
                     EnterState_Die();
                     break;
             }
+
+            return;
         }
 
         
         switch (_curState)
         {
             case State.None:
-                //nothing
                 break;
             case State.Entering:
                 break;
@@ -114,12 +112,10 @@ public class Bug : MonoBehaviour
             case State.RandomMove:
                 Update_RandomMove();
                 break;
-            case State.Step:
-                break;
             case State.Exiting:
+                UpdateState_Exiting();
                 break;
             case State.Die:
-                //Debug.Log("Die");
                 break;
         }
 
@@ -138,6 +134,7 @@ public class Bug : MonoBehaviour
     /// <param name="seat"></param>
     public void EnterToSeat(SeatController seat, int priority)
     {
+        SplineMoveOn();
         SetState(State.Entering);
         
         _curSeatController = seat;
@@ -145,7 +142,6 @@ public class Bug : MonoBehaviour
         _navMeshAgent.avoidancePriority = priority;
 
         SplineMoveOn();
-        PlayAnim();
 
         _splineMove.pathContainer = seat.EnterPath;
         _splineMove.loopType = splineMove.LoopType.none;
@@ -223,16 +219,53 @@ public class Bug : MonoBehaviour
         _randomMoveTime += Time.deltaTime;
         if (_randomMoveTime > randomMoveDuration)
         {
-            SetState(State.Die);
+            SetState(State.Exiting);
             return;
         }
     }
     #endregion
 
+    #region State_Exiting
+
+    private void EnterState_Exiting()
+    {
+        _navMeshAgent.ResetPath();
+        Vector3 point;
+        if (RandomPoint(exitTr[UnityEngine.Random.Range(0, exitTr.Length)].position, 0.25f, out point))
+        {
+            Debug.Log(point);
+            Debug.DrawRay(point, Vector3.up, Color.blue, 1.0f);
+            _navMeshAgent.SetDestination(point);
+        }
+        _navMeshAgent.speed = exitSpeed;
+        _navMeshAgent.stoppingDistance = 2f;
+    }
+    
+    private void UpdateState_Exiting()
+    {
+        if(_navMeshAgent.remainingDistance <= _navMeshAgent.stoppingDistance) 
+        {
+            SetState(State.Die);
+            return;
+        }
+
+        if (isStep)
+        {
+            Debug.Log("밟힘}");
+            SetState(State.Die);
+            return;
+        }
+    }
+    
+
+    #endregion
+    
     #region State_Die
     private void EnterState_Die()
     {
         SplineMoveOff();
+        _navMeshAgent.ResetPath();
+        _navMeshAgent.speed = 0;
         var obj = Managers.Resource.Instantiate("Effect/Dust");
         obj.transform.position = transform.position;
         obj.transform.rotation = Quaternion.identity;
@@ -266,22 +299,22 @@ public class Bug : MonoBehaviour
     }
     
     
-    /// <summary>
-    /// 움직임 애니메이션
-    /// </summary>
-    private void PlayAnim()
-    {
-        seatAnimationHandler.PlayAnimationForState("run", 0);
-    }
-
-    
-    /// <summary>
-    /// To Default Animation
-    /// </summary>
-    private void StopAnim()
-    {
-        skeletonAnimation.ClearState();
-    }
+    // /// <summary>
+    // /// 움직임 애니메이션
+    // /// </summary>
+    // private void PlayAnim()
+    // {
+    //     seatAnimationHandler.PlayAnimationForState("run", 0);
+    // }
+    //
+    //
+    // /// <summary>
+    // /// To Default Animation
+    // /// </summary>
+    // private void StopAnim()
+    // {
+    //     skeletonAnimation.ClearState();
+    // }
     #endregion
 
 
@@ -320,7 +353,6 @@ public class Bug : MonoBehaviour
         int layerMask = 1 << LayerMask.NameToLayer("Bug");
         if (Physics.Raycast(ray, out hit, 100f, layerMask))
         {
-            Debug.Log(hit.transform.gameObject.name);
             if (hit.transform.gameObject.Equals(gameObject))
             {
                 Debug.Log("Bug Clicked");
