@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,17 +9,58 @@ public class BugFactory : MonoBehaviour
     [SerializeField] List<Bug> bugPrefabs = new List<Bug>();
     [SerializeField] List<Bug> madeBugList = new List<Bug>();
     [SerializeField] List<SeatController> _seatControllers = new List<SeatController>();
-
-    public float enterSpeed;
     
+    private int showingBugMin = 4;
+
+    private float time = 0;
+    private float interval = 2.5f;
+    
+    private int bugOrder = 0;
+    private int seatOrder = 0;
+    
+    private void Update()
+    {
+        if (madeBugList.Count < showingBugMin)
+        {
+            time += Time.deltaTime;
+            if (time > interval)
+            {
+                time = 0;
+                MadeBug();
+            }
+        }
+        else
+        {
+            time = 0;
+        }
+    }
+
     public void MadeBug()
     {
-        var targetBug = bugPrefabs[UnityEngine.Random.Range(0, bugPrefabs.Count)];
-        var targetSeat = _seatControllers[UnityEngine.Random.Range(0, _seatControllers.Count)];
+        var targetBugIndex = bugOrder++ % bugPrefabs.Count;
+        var targetBug = bugPrefabs[targetBugIndex];
+        
+            
+
+        var targetSeatIndex = seatOrder++ % _seatControllers.Count;
+
+        if(bugPrefabs.Count == _seatControllers.Count && targetBugIndex == 0)
+            targetSeatIndex = seatOrder++ % _seatControllers.Count;
+
+        var targetSeat = _seatControllers[targetSeatIndex];
         var bug = Instantiate(targetBug, this.transform);
+
+        if (!targetSeat.CanEnter || bug == null)
+        {
+            DestroyImmediate(bug.gameObject);
+            return;
+        }
+        
         madeBugList.Add(bug);
-        bug.EnterToSeat(targetSeat, enterSpeed, 50 + madeBugList.Count);
+        bug.OnDie += () => madeBugList.Remove(bug);
+        bug.EnterToSeat(targetSeat, 50 + madeBugList.Count);
     }
+    
 
     public void ClearBugs()
     {
@@ -26,7 +68,7 @@ public class BugFactory : MonoBehaviour
         {
             if (madeBugList[i] != null)
             {
-                madeBugList[i].Die();
+                madeBugList[i].SetState(Bug.State.Die);
             }
         }
         madeBugList.Clear();

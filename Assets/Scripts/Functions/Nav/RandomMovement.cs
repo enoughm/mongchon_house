@@ -45,6 +45,4 @@ public class RandomMovement : MonoBehaviour //don't forget to change the script 
         result = Vector3.zero;
         return false;
     }
-
-    
 }

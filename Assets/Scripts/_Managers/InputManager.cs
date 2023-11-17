@@ -23,9 +23,13 @@ public class InputManager
         if(Input.GetKeyUp(KeyCode.Escape))
             KeyboardAction?.Invoke(Define.KeyEvent.Escape);
 
-        if (!EventSystem.current.IsPointerOverGameObject() || MouseAction == null)
+        //Pointer Over는 UI가 아닌 곳에서만 작동하게 하기 위해
+        //if (!EventSystem.current.IsPointerOverGameObject() || MouseAction == null)
+        //    return;
+        
+        
+        if (MouseAction == null)
             return;
-
         if (Input.GetMouseButton(0))
         {
             MouseAction?.Invoke(Define.MouseEvent.Press);

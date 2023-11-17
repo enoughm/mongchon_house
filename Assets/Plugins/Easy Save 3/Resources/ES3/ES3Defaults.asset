@@ -30,11 +30,15 @@ MonoBehaviour:
     referenceMode: 2
     serializationDepthLimit: 64
     assemblyNames:
+    - AiToolbox
+    - AiToolbox.Samples
     - Assembly-CSharp
     - Assembly-CSharp-firstpass
     - Flexalon
     - Hierarchy2.Runtime
     - NavMeshPlus
+    - SingularityGroup.HotReload.Runtime
+    - SingularityGroup.HotReload.Runtime.Public
     - spine-csharp
     - spine-unity
     - spine-unity-examples
