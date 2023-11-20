@@ -1,0 +1,79 @@
+장남.png
+	size: 4096, 512
+	filter: Linear, Linear
+	pma: true
+L_arm
+	bounds: 657, 119, 186, 418
+	offsets: 0, 39, 186, 457
+	rotate: 90
+L_foot
+	bounds: 3950, 362, 122, 135
+L_hand
+	bounds: 1474, 224, 95, 160
+	offsets: 1, 1, 104, 162
+	rotate: 90
+L_leg
+	bounds: 2042, 244, 288, 253
+L_leg1
+	bounds: 2332, 298, 199, 338
+	offsets: 1, 1, 201, 340
+	rotate: 90
+L_legup
+	bounds: 3671, 254, 277, 243
+R_arm
+	bounds: 1272, 321, 176, 410
+	rotate: 90
+R_foot
+	bounds: 1350, 184, 122, 135
+R_hand
+	bounds: 3950, 274, 86, 110
+	rotate: 90
+R_leg
+	bounds: 3383, 261, 286, 236
+R_leg1
+	bounds: 2672, 297, 200, 331
+	offsets: 1, 1, 202, 333
+	rotate: 90
+R_lrgup
+	bounds: 1077, 64, 271, 241
+a1
+	bounds: 321, 22, 51, 89
+	rotate: 90
+a2
+	bounds: 223, 24, 49, 96
+	rotate: 90
+a3
+	bounds: 129, 15, 58, 92
+	rotate: 90
+b1
+	bounds: 1350, 104, 97, 78
+b2
+	bounds: 1636, 257, 62, 39
+	rotate: 90
+b3
+	bounds: 2, 2, 71, 125
+	rotate: 90
+body
+	bounds: 2, 75, 422, 653
+	rotate: 90
+eye1
+	bounds: 2332, 265, 137, 31
+	offsets: 6, 3, 144, 35
+eye2
+	bounds: 657, 108, 135, 9
+	offsets: 1, 1, 137, 11
+head
+	bounds: 1684, 242, 255, 356
+	rotate: 90
+창
+	bounds: 3005, 304, 75, 202
+	rotate: 90
+창막대기
+	bounds: 657, 307, 190, 613
+	rotate: 90
+화살
+	bounds: 3209, 283, 96, 148
+	rotate: 90
+화살막대기
+	bounds: 3005, 381, 116, 376
+	rotate: 90

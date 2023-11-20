@@ -6,6 +6,7 @@ TagManager:
   tags:
   - RecordCam
   - FloorCam
+  - FloorUrgTouchDetector
   layers:
   - Default
   - TransparentFX

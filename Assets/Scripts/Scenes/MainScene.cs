@@ -1,8 +1,10 @@
 ﻿using System;
+using UniRx;
 using UnityEngine;
 
 public class MainScene : BaseScene
 {
+    
     [SerializeField] private LightManager _lightManager;
     [SerializeField] private BugFactory _bugFactory;
     
@@ -19,8 +21,20 @@ public class MainScene : BaseScene
     private void Start()
     {
         _lightManager.ToDark(1);
+        this.ObserveEveryValueChanged(_ => Managers.Game.IsSomeone).Subscribe(_=>OnChangeIsSomeone(_));
     }
 
+    private void OnChangeIsSomeone(bool isSomeone)
+    {
+        if (isSomeone)
+        {
+            _lightManager.ToLight(1);
+        }
+        else
+        {
+            _lightManager.ToDark(1);
+        }
+    }
 
     private void Update()
     {

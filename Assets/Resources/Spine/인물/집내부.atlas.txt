@@ -1,0 +1,35 @@
+집내부.png
+	size: 4096, 1024
+	filter: Linear, Linear
+	pma: true
+걸려있는1
+	bounds: 1937, 621, 490, 365
+	offsets: 1, 1, 495, 367
+걸려있는2
+	bounds: 2, 2, 109, 326
+	offsets: 1, 27, 111, 354
+	rotate: 90
+다듬기재료1
+	bounds: 959, 155, 630, 243
+	offsets: 1, 1, 632, 245
+빨래
+	bounds: 2, 113, 955, 873
+	offsets: 1, 1, 957, 875
+빨래그림자
+	bounds: 959, 400, 976, 586
+	offsets: 1, 9, 985, 598
+생선
+	bounds: 1591, 346, 176, 52
+	offsets: 1, 1, 178, 54
+창문1
+	bounds: 3105, 715, 335, 271
+	offsets: 2, 1, 338, 274
+창문1bg
+	bounds: 3442, 741, 310, 245
+	offsets: 1, 1, 312, 247
+창문2
+	bounds: 2429, 649, 353, 337
+	offsets: 1, 1, 355, 339
+창문2bg
+	bounds: 2784, 678, 319, 308
+	offsets: 1, 1, 321, 310

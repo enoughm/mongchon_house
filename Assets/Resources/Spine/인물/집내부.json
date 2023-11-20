@@ -1,0 +1,80 @@
+{
+"skeleton": {
+	"hash": "ablC/tJrojE",
+	"spine": "4.2.05-beta",
+	"x": -1924.33,
+	"y": 102.36,
+	"width": 2889,
+	"height": 929,
+	"images": "../백제_스파인_모음/object/",
+	"audio": "../백제_스파인_모음/2_내부오브젝트/"
+},
+"bones": [
+	{ "name": "root", "x": -165.33, "y": 50.36 }
+],
+"slots": [
+	{ "name": "다듬기재료1", "bone": "root", "attachment": "다듬기재료1" },
+	{ "name": "생선", "bone": "root", "attachment": "생선" },
+	{ "name": "걸려있는2", "bone": "root", "attachment": "걸려있는2" },
+	{ "name": "걸려있는1", "bone": "root", "attachment": "걸려있는1" },
+	{ "name": "빨래그림자", "bone": "root", "attachment": "빨래그림자" },
+	{ "name": "빨래", "bone": "root", "attachment": "빨래" },
+	{ "name": "창문2bg", "bone": "root", "attachment": "창문2bg" },
+	{ "name": "창문1bg", "bone": "root", "attachment": "창문1bg" },
+	{ "name": "창문2", "bone": "root", "attachment": "창문2" },
+	{ "name": "창문1", "bone": "root", "attachment": "창문1" }
+],
+"skins": [
+	{
+		"name": "default",
+		"attachments": {
+			"걸려있는1": {
+				"걸려있는1": { "x": 327.5, "y": 797.5, "width": 495, "height": 367 }
+			},
+			"걸려있는2": {
+				"걸려있는2": { "x": 722.5, "y": 790, "width": 111, "height": 354 }
+			},
+			"다듬기재료1": {
+				"다듬기재료1": { "x": 81, "y": 234.5, "width": 632, "height": 245 }
+			},
+			"빨래": {
+				"빨래": { "x": -1280.5, "y": 489.5, "width": 957, "height": 875 }
+			},
+			"빨래그림자": {
+				"빨래그림자": { "x": -1266.5, "y": 635, "width": 985, "height": 598 }
+			},
+			"생선": {
+				"생선": { "x": 126, "y": 244, "width": 178, "height": 54 }
+			},
+			"창문1": {
+				"창문1": { "x": -530, "y": 731, "width": 338, "height": 274 }
+			},
+			"창문1bg": {
+				"창문1bg": { "x": -527, "y": 731.5, "width": 312, "height": 247 }
+			},
+			"창문2": {
+				"창문2": { "x": 952.5, "y": 726.5, "width": 355, "height": 339 }
+			},
+			"창문2bg": {
+				"창문2bg": { "x": 949.5, "y": 714, "width": 321, "height": 310 }
+			}
+		}
+	}
+],
+"animations": {
+	"animation": {
+		"slots": {
+			"다듬기재료1": {
+				"attachment": [
+					{}
+				]
+			},
+			"생선": {
+				"attachment": [
+					{}
+				]
+			}
+		}
+	}
+}
+}

@@ -1,0 +1,24 @@
+차남며느리_B.png
+	size: 2048, 256
+	filter: Linear, Linear
+	pma: true
+B_H_1
+	bounds: 1389, 144, 70, 103
+	offsets: 8, 4, 78, 107
+B_L_arm
+	bounds: 1104, 99, 148, 283
+	offsets: 0, 99, 148, 382
+	rotate: 90
+B_P_1
+	bounds: 827, 35, 23, 57
+	rotate: 90
+B_body
+	bounds: 2, 15, 232, 448
+	offsets: 8, 0, 240, 448
+	rotate: 90
+B_head
+	bounds: 827, 60, 187, 275
+	rotate: 90
+leg copy
+	bounds: 452, 2, 245, 373
+	rotate: 90
