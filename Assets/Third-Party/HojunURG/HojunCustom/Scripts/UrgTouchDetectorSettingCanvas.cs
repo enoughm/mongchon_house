@@ -8,6 +8,12 @@ public class UrgTouchDetectorSettingCanvas : MonoBehaviour
 {
     [SerializeField] private UrgTouchDetector urgTouchDetector;
     
+    [SerializeField] private Button debugOnOffButton;
+    [SerializeField] private Button settingOnOffButton;
+    
+    [SerializeField] private GameObject debugRoot;
+    [SerializeField] private GameObject settingRoot;
+    
     [SerializeField] private InputField hokuyoIP;
     [SerializeField] private InputField screenAreaSizeX;
     [SerializeField] private InputField screenAreaSizeY;
@@ -25,6 +31,8 @@ public class UrgTouchDetectorSettingCanvas : MonoBehaviour
     [SerializeField] private Button cancelButton;
     [SerializeField] private Button reconnectButton;
 
+    [SerializeField] private UrgTouchDetectorSettingGridView gridView;
+
     Canvas _canvas;
     private void Awake()
     {
@@ -33,16 +41,27 @@ public class UrgTouchDetectorSettingCanvas : MonoBehaviour
         curButton.onClick.AddListener(CurValue);
         cancelButton.onClick.AddListener(Cancel);
         reconnectButton.onClick.AddListener(Reconnect);
+        debugOnOffButton.onClick.AddListener(() =>
+        {
+            debugRoot.gameObject.SetActive(!debugRoot.gameObject.activeSelf);
+        });
+        settingOnOffButton.onClick.AddListener(() =>
+        {
+            settingRoot.gameObject.SetActive(!settingRoot.gameObject.activeSelf);
+        });
     }
 
     private void Start()
     {
         _canvas.targetDisplay = urgTouchDetector.TargetDisplay;
+        gridView.CreateGridLayout(urgTouchDetector.TouchGridCellSize, urgTouchDetector.TouchGrids);
+        gridView.OnClickGrid += OnClickGrid;
+        CurValue();
     }
 
-    private void OnEnable()
+    private void OnClickGrid(Vector2 arg1, bool arg2)
     {
-        CurValue();
+        urgTouchDetector.SetGridDataSetting(arg1, arg2);
     }
     
     private void Reconnect()
@@ -63,6 +82,8 @@ public class UrgTouchDetectorSettingCanvas : MonoBehaviour
         realAreaOffsetY.text = urgTouchDetector.UrgSensing.actuallySensingAreaOffset.y.ToString();
         objThreshold.text = urgTouchDetector.UrgSensing.objThreshold.ToString();
         minWidth.text = urgTouchDetector.UrgSensing.minWidth.ToString();
+        
+        gridView.Load(urgTouchDetector.UrgGridDataSettingArray);
     }
 
     private void Cancel()

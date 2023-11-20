@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b5fd681c76e44d749a42c398ec886f9f, type: 3}
-  m_Name: FinalOptions
+  m_Name: FinalOptions_ManyGrid
   m_EditorClassIdentifier: 
-  touchGrid: {x: 30, y: 15}
-  gridAverageAcceptThreshold: 1.5
-  gridAreaCountCheckThreshold: 2
-  competitionApproveThreshold: 0.65
+  touchGrid: {x: 60, y: 30}
+  gridAverageAcceptThreshold: 1
+  gridAreaCountCheckThreshold: 3
+  competitionApproveThreshold: 1
   gridAverageMaxCollectCount: 3
   touchCheckSpeed: 1
   touchCheckInGridArea: 0

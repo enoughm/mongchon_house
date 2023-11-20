@@ -2,7 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using AYellowpaper.SerializedCollections;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 public enum UrgTouchState
 {
@@ -24,6 +27,9 @@ public enum UrgTouchState
 public class UrgTouchDetector : MonoBehaviour
 {
     public Action<UrgTouchState, Vector2> HokuyoAction = null;
+    public Action<string, UrgGridObserverData> RectObserveAction = null;
+    
+    
     public UrgControlCustom UrgControl => urgControl;
     public UrgDeviceEthernetCustom UrgDeviceEthernet => urgDeviceEthernetCustom;
     public UrgSensingCustom UrgSensing => urgSensing;
@@ -31,6 +37,10 @@ public class UrgTouchDetector : MonoBehaviour
     public Vector2 TouchGrids => settingData.touchGrid;
    // public UrgTouchData[,] TouchGridItems => _touchGridItems;
     public UrgGridData[,] UrgGridItems => _urgGridArray;
+
+    public List<UrgGridData> UrgGridItemsParsedToList => ChangeArrayToOneDimensionList(_urgGridArray);
+
+    public UrgGridDataSetting[,] UrgGridDataSettingArray => _urgGridDataSettingArray;
     public Vector2 TouchGridCellSize => _touchGridCellSize;
     public int TargetDisplay => _targetDisplay;
     public int ScreenWidth { get; private set; }
@@ -56,17 +66,25 @@ public class UrgTouchDetector : MonoBehaviour
     [SerializeField] private UrgTouchDetectorDebugCanvas debugCanvas;
     [SerializeField] private UrgTouchDetectorSettingCanvas settingCanvas;
 
-    //private UrgTouchData[,] _touchGridItems;
+    [Header("rect observe")]
+    [SerializeField] private bool checkMouseViewPortPos;
+    [SerializeField] private SerializedDictionary<string, Rect> registeredObserver;
+    
     private List<RealTouchData> _allScreenTouchList = new List<RealTouchData>();
     
     //grid data 관련 
-    private UrgGridData[,] _urgGridArray;
+    private UrgGridData[,] _urgGridArray; //실제 그리드 데이터
+    private UrgGridDataSetting[,] _urgGridDataSettingArray; //그리드별 저장하고 불러올 옵션 데이터
     private List<List<UrgGridData>> _gridDataAreaList = new List<List<UrgGridData>>();
     
     //자동세팅되는 변수들
     private int _targetDisplay;
     private Vector2 _touchGridCellSize;
-    
+
+
+
+
+
     private void Awake()
     {
         _targetDisplay = targetCam.targetDisplay;
@@ -82,65 +100,47 @@ public class UrgTouchDetector : MonoBehaviour
         urgControl.StartTcp(HokuyoIP);
     }
 
-    private void CreateTouchGrid()
+    /// <summary>
+    /// rect observe
+    /// </summary>
+    private void UpdateRect()
     {
-        var cellWidth = ScreenWidth / settingData.touchGrid.x;
-        var cellHeight = ScreenHeight / settingData.touchGrid.y;
-        _touchGridCellSize.x = cellWidth;
-        _touchGridCellSize.y = cellHeight;
-       // _touchGridItems = new UrgTouchData[(int) settingData.touchGrid.x, (int) settingData.touchGrid.y];
-        _urgGridArray = new UrgGridData[(int) settingData.touchGrid.x, (int) settingData.touchGrid.y];
-        for (int x = 0; x < (int) settingData.touchGrid.x; x++)
+        foreach (var item in registeredObserver)
         {
-            for (int y = 0; y < (int) settingData.touchGrid.y; y++)
+            var list = UrgGridItemsParsedToList.Where(data => item.Value.Contains(data.gridViewPortPos)).ToList();
+            var total = list.Sum(data => data.sensedDataCountAverage);
+            if (list.Count > 0 && total > 0)
             {
-                _urgGridArray[x,y].sensedObjects = new List<UrgSensingCustom.ConvertedSensedObject>();
-                _urgGridArray[x,y].surroundingGridDataList = new List<UrgGridData>();
-                _urgGridArray[x,y].sensedDataCountQueue = new Queue<float>();
-                _urgGridArray[x, y].gridPos = new Vector2(x, y);
+                UrgGridObserverData observerData = new UrgGridObserverData()
+                {
+                    data = new List<UrgGridData>(),
+                    averageSum = 0,
+                };
+                observerData.data = list;
+                observerData.averageSum = list.Sum(data => data.sensedDataCountAverage);
+                RectObserveAction?.Invoke(item.Key, observerData);
             }
         }
-    }
-
-    private void DataLoad()
-    {
-        HokuyoIP = PlayerPrefs.GetString($"{_targetDisplay}_hokuyoIP", HokuyoIP);
-        urgSensing.sensingAreaSize.x = PlayerPrefs.GetFloat($"{_targetDisplay}_screenAreaSizeX", urgSensing.sensingAreaSize.x);
-        urgSensing.sensingAreaSize.y = PlayerPrefs.GetFloat($"{_targetDisplay}_screenAreaSizeY", urgSensing.sensingAreaSize.y);
-        urgSensing.sensingAreaOffset.x = PlayerPrefs.GetFloat($"{_targetDisplay}_screenAreaOffsetX", urgSensing.sensingAreaOffset.x);
-        urgSensing.sensingAreaOffset.y = PlayerPrefs.GetFloat($"{_targetDisplay}_screenAreaOffsetY", urgSensing.sensingAreaOffset.y);
-        urgSensing.actuallySensingAreaSize.x = PlayerPrefs.GetFloat($"{_targetDisplay}_realAreaSizeX", urgSensing.actuallySensingAreaSize.x);
-        urgSensing.actuallySensingAreaSize.y = PlayerPrefs.GetFloat($"{_targetDisplay}_realAreaSizeY", urgSensing.actuallySensingAreaSize.y);
-        urgSensing.actuallySensingAreaOffset.x = PlayerPrefs.GetFloat($"{_targetDisplay}_realAreaOffsetX", urgSensing.actuallySensingAreaOffset.x);
-        urgSensing.actuallySensingAreaOffset.y = PlayerPrefs.GetFloat($"{_targetDisplay}_realAreaOffsetY", urgSensing.actuallySensingAreaOffset.y);
-        urgSensing.objThreshold = PlayerPrefs.GetFloat($"{_targetDisplay}_objThreshold", urgSensing.objThreshold);
-        urgSensing.minWidth = PlayerPrefs.GetFloat($"{_targetDisplay}_minWidth", urgSensing.minWidth);
-    }
-    
-    public void DataSave()
-    {
-        PlayerPrefs.SetString($"{_targetDisplay}_hokuyoIP", HokuyoIP);
-        PlayerPrefs.SetFloat($"{_targetDisplay}_screenAreaSizeX", urgSensing.sensingAreaSize.x);
-        PlayerPrefs.SetFloat($"{_targetDisplay}_screenAreaSizeY", urgSensing.sensingAreaSize.y);
-        PlayerPrefs.SetFloat($"{_targetDisplay}_screenAreaOffsetX", urgSensing.sensingAreaOffset.x);
-        PlayerPrefs.SetFloat($"{_targetDisplay}_screenAreaOffsetY", urgSensing.sensingAreaOffset.y);
-        PlayerPrefs.SetFloat($"{_targetDisplay}_realAreaSizeX", urgSensing.actuallySensingAreaSize.x);
-        PlayerPrefs.SetFloat($"{_targetDisplay}_realAreaSizeY", urgSensing.actuallySensingAreaSize.y);
-        PlayerPrefs.SetFloat($"{_targetDisplay}_realAreaOffsetX", urgSensing.actuallySensingAreaOffset.x);
-        PlayerPrefs.SetFloat($"{_targetDisplay}_realAreaOffsetY", urgSensing.actuallySensingAreaOffset.y);
-        PlayerPrefs.SetFloat($"{_targetDisplay}_objThreshold", urgSensing.objThreshold);
-        PlayerPrefs.SetFloat($"{_targetDisplay}_minWidth", urgSensing.minWidth);
+        //옵저버 데이터를 Action으로 뺴준다
     }
 
     private void Update()
     {
         //디버그 및 세팅 UI 띄우기
-        if(Input.GetKeyDown(KeyCode.Q))
+        if(Input.GetKeyDown(KeyCode.Z))
             debugCanvas.gameObject.SetActive(!debugCanvas.gameObject.activeSelf);
-        else if(Input.GetKeyDown(KeyCode.W))
+        else if(Input.GetKeyDown(KeyCode.X))
             settingCanvas.gameObject.SetActive(!settingCanvas.gameObject.activeSelf);
+
         
-        //grid data 초기화 (화면을 그리드로 나누고, 그리드 당 데이터의 개수를 확인하는)
+        if (checkMouseViewPortPos)
+        {
+            Vector3 mousePos = Input.mousePosition;
+            Vector3 viewportPos = targetCam.ScreenToViewportPoint(mousePos);
+            Debug.Log(viewportPos);
+        }
+
+            //grid data 초기화 (화면을 그리드로 나누고, 그리드 당 데이터의 개수를 확인하는)
         InitGridData();
         
         //실제 감지 영역안의 모든 감지 데이터를 받아온다.
@@ -153,6 +153,8 @@ public class UrgTouchDetector : MonoBehaviour
             try
             {
                 //받아온 데이터는 각 위치에 맞는 그리드데이터 안에 저장시킨다
+                if(_urgGridDataSettingArray[x, y].isAvailableArea)
+                    continue;
                 _urgGridArray[x, y].sensedObjects.Add(allSensedDatas[i]);
             }
             catch (Exception e)
@@ -311,7 +313,71 @@ public class UrgTouchDetector : MonoBehaviour
         // }
         // RemoveUrgTouchData();
 
+        UpdateRect();
+    }
+    
+     private void CreateTouchGrid()
+    {
+        var cellWidth = ScreenWidth / settingData.touchGrid.x;
+        var cellHeight = ScreenHeight / settingData.touchGrid.y;
+        _touchGridCellSize.x = cellWidth;
+        _touchGridCellSize.y = cellHeight;
+       // _touchGridItems = new UrgTouchData[(int) settingData.touchGrid.x, (int) settingData.touchGrid.y];
+       _urgGridDataSettingArray = new UrgGridDataSetting[(int) settingData.touchGrid.x, (int) settingData.touchGrid.y];
+        _urgGridArray = new UrgGridData[(int) settingData.touchGrid.x, (int) settingData.touchGrid.y];
+        for (int x = 0; x < (int) settingData.touchGrid.x; x++)
+        {
+            for (int y = 0; y < (int) settingData.touchGrid.y; y++)
+            {
+                //그리드 데이터
+                _urgGridArray[x,y].sensedObjects = new List<UrgSensingCustom.ConvertedSensedObject>();
+                _urgGridArray[x,y].surroundingGridDataList = new List<UrgGridData>();
+                _urgGridArray[x,y].sensedDataCountQueue = new Queue<float>();
+                _urgGridArray[x, y].gridPos = new Vector2(x, y);
+                
+                
+                //그리드 세팅 데이터
+                _urgGridDataSettingArray[x, y].gridPos = new Vector2(x, y);
+                _urgGridDataSettingArray[x, y].isAvailableArea = false;
+            }
+        }
+    }
 
+    private void DataLoad()
+    {
+        HokuyoIP = PlayerPrefs.GetString($"{_targetDisplay}_hokuyoIP", HokuyoIP);
+        urgSensing.sensingAreaSize.x = PlayerPrefs.GetFloat($"{_targetDisplay}_screenAreaSizeX", urgSensing.sensingAreaSize.x);
+        urgSensing.sensingAreaSize.y = PlayerPrefs.GetFloat($"{_targetDisplay}_screenAreaSizeY", urgSensing.sensingAreaSize.y);
+        urgSensing.sensingAreaOffset.x = PlayerPrefs.GetFloat($"{_targetDisplay}_screenAreaOffsetX", urgSensing.sensingAreaOffset.x);
+        urgSensing.sensingAreaOffset.y = PlayerPrefs.GetFloat($"{_targetDisplay}_screenAreaOffsetY", urgSensing.sensingAreaOffset.y);
+        urgSensing.actuallySensingAreaSize.x = PlayerPrefs.GetFloat($"{_targetDisplay}_realAreaSizeX", urgSensing.actuallySensingAreaSize.x);
+        urgSensing.actuallySensingAreaSize.y = PlayerPrefs.GetFloat($"{_targetDisplay}_realAreaSizeY", urgSensing.actuallySensingAreaSize.y);
+        urgSensing.actuallySensingAreaOffset.x = PlayerPrefs.GetFloat($"{_targetDisplay}_realAreaOffsetX", urgSensing.actuallySensingAreaOffset.x);
+        urgSensing.actuallySensingAreaOffset.y = PlayerPrefs.GetFloat($"{_targetDisplay}_realAreaOffsetY", urgSensing.actuallySensingAreaOffset.y);
+        urgSensing.objThreshold = PlayerPrefs.GetFloat($"{_targetDisplay}_objThreshold", urgSensing.objThreshold);
+        urgSensing.minWidth = PlayerPrefs.GetFloat($"{_targetDisplay}_minWidth", urgSensing.minWidth);
+        LoadGridDataSettingArray();
+    }
+    
+    public void DataSave()
+    {
+        PlayerPrefs.SetString($"{_targetDisplay}_hokuyoIP", HokuyoIP);
+        PlayerPrefs.SetFloat($"{_targetDisplay}_screenAreaSizeX", urgSensing.sensingAreaSize.x);
+        PlayerPrefs.SetFloat($"{_targetDisplay}_screenAreaSizeY", urgSensing.sensingAreaSize.y);
+        PlayerPrefs.SetFloat($"{_targetDisplay}_screenAreaOffsetX", urgSensing.sensingAreaOffset.x);
+        PlayerPrefs.SetFloat($"{_targetDisplay}_screenAreaOffsetY", urgSensing.sensingAreaOffset.y);
+        PlayerPrefs.SetFloat($"{_targetDisplay}_realAreaSizeX", urgSensing.actuallySensingAreaSize.x);
+        PlayerPrefs.SetFloat($"{_targetDisplay}_realAreaSizeY", urgSensing.actuallySensingAreaSize.y);
+        PlayerPrefs.SetFloat($"{_targetDisplay}_realAreaOffsetX", urgSensing.actuallySensingAreaOffset.x);
+        PlayerPrefs.SetFloat($"{_targetDisplay}_realAreaOffsetY", urgSensing.actuallySensingAreaOffset.y);
+        PlayerPrefs.SetFloat($"{_targetDisplay}_objThreshold", urgSensing.objThreshold);
+        PlayerPrefs.SetFloat($"{_targetDisplay}_minWidth", urgSensing.minWidth);
+        SaveGridDataSettingArray();
+    }
+
+    public void SetGridDataSetting(Vector2 arg1, bool arg2)
+    {
+        UrgGridDataSettingArray[(int)arg1.x, (int)arg1.y].isAvailableArea = arg2;
     }
     
     Vector2 GetMidPoint(List<Vector2> vectorList)
@@ -460,7 +526,7 @@ public class UrgTouchDetector : MonoBehaviour
             // inserted = true;
             
             //TEST
-            if (Mathf.Abs(item.viewPortPos.x - viewPortPos.x) < settingData.touchMergeDistanceX && Mathf.Abs(item.viewPortPos.y - viewPortPos.y) < settingData.touchMergeDistanceY && !isScreenEdge)
+            if (Mathf.Abs(item.viewPortPos.x - viewPortPos.x) < settingData.touchMergeDistanceX && Mathf.Abs(item.viewPortPos.y - viewPortPos.y) < settingData.touchMergeDistanceY)
             {
                 item.viewPortPos = Vector2.Lerp(_allScreenTouchList[i].viewPortPos, viewPortPos, Time.deltaTime * settingData.touchCheckSpeed);
                 item.liveTime += Time.deltaTime;
@@ -580,39 +646,99 @@ public class UrgTouchDetector : MonoBehaviour
         
         return false;
     }
-    
 
-    [System.Serializable]
-    public class UrgTouchStateSettingData
+
+    private void SaveGridDataSettingArray()
     {
-        public UrgTouchState touchState;
-        public float nextStateInvokeDuration;
+        try
+        {
+            UrgGridDataSettingSave save = new UrgGridDataSettingSave();
+
+            for (int i = 0; i < _urgGridDataSettingArray.GetLength(0); i++)
+            {
+                for (int j = 0; j < _urgGridDataSettingArray.GetLength(1); j++)
+                {
+                    save.list.Add(_urgGridDataSettingArray[i, j]);
+                }
+            }
+
+            string json = JsonUtility.ToJson(save, true);
+            Debug.Log(json);
+
+            // 여기에서 json 문자열을 파일에 저장 또는 필요한 대로 사용할 수 있습니다.
+            PlayerPrefs.SetString($"{_targetDisplay}_urgGridDataSettingArray", json);
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e);
+        }
+    }
+
+    private List<T> ChangeArrayToOneDimensionList<T>(T[,] t)
+    {
+        var ret = new List<T>();
+        
+        int rows = t.GetLength(0);
+        int columns = t.GetLength(1);
+
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < columns; j++)
+            {
+                ret.Add(t[i, j]);
+            }
+        }
+        return ret;
+    }
+    
+    private void LoadGridDataSettingArray()
+    {
+        try
+        {
+            // JSON 파일에서 문자열 읽어오는 예시
+            bool has = PlayerPrefs.HasKey($"{_targetDisplay}_urgGridDataSettingArray");
+            if (!has)
+                return;
+            string json = PlayerPrefs.GetString($"{_targetDisplay}_urgGridDataSettingArray");
+            var list2D = JsonUtility.FromJson<UrgGridDataSettingSave>(json);
+
+            UrgGridDataSetting[,] newArray2D = new UrgGridDataSetting[_urgGridDataSettingArray.GetLength(0), _urgGridDataSettingArray.GetLength(1)];
+
+            for (int i = 0; i < _urgGridDataSettingArray.GetLength(0); i++)
+            {
+                for (int j = 0; j < _urgGridDataSettingArray.GetLength(1); j++)
+                {
+                    newArray2D[i, j] = list2D.list[i * _urgGridDataSettingArray.GetLength(1) + j];
+                }
+            }
+
+            _urgGridDataSettingArray = newArray2D;
+        }
+        catch (Exception e)
+        {
+            Debug.Log(e);
+        }
     }
 }
 
+[System.Serializable]
+public class UrgGridDataSettingSave
+{
+    public List<UrgGridDataSetting> list = new List<UrgGridDataSetting>();
+}
 
-// public struct UrgTouchData
-// {
-//     public UrgSensingCustom.ConvertedSensedObject sensedObject;
-//     public UrgTouchState touchState;
-//     public Rect gridRect;
-//     public bool dataInserted;
-//
-//     public float EmptyTime
-//     {
-//         get => _emptyTime;
-//         set => _emptyTime = Mathf.Clamp(value, 0, float.MaxValue);
-//     }
-//     public float InsertTime
-//     {
-//         get => _insertTime;
-//         set => _insertTime = Mathf.Clamp(value, 0, float.MaxValue);
-//     }
-//
-//     public float prevInsertTime;
-//     private float _insertTime;
-//     private float _emptyTime;
-// }
+[System.Serializable]
+public struct UrgGridDataSetting
+{
+    public Vector2 gridPos;
+    public bool isAvailableArea;
+}
+
+public struct UrgGridObserverData
+{
+    public List<UrgGridData> data;
+    public float averageSum;
+}
 
 public struct UrgGridData
 {
@@ -634,15 +760,9 @@ public struct UrgGridData
     
     //주변 그리드에 대한 데이타
     public List<UrgGridData> surroundingGridDataList;
-
     
     //연결된 그리드를 가져오는데 사용됐는지.
     public bool linkedGridCheck;
-}
-
-public struct UrgGridAreaData
-{
-    public List<UrgGridData> gridDataList;
 }
 
 
