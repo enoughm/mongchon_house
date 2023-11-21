@@ -1,35 +1,37 @@
 옆모습.png
-	size: 1024, 256
-	filter: Linear, Linear
-	pma: true
+size:726,217
+filter:Linear,Linear
+pma:true
 1
-	bounds: 787, 189, 69, 65
+bounds:519,11,69,65
+rotate:90
 L_F
-	bounds: 2, 7, 88, 33
+bounds:620,9,88,33
 L_arm
-	bounds: 636, 166, 88, 149
-	rotate: 90
+bounds:398,66,88,149
 R_arm
-	bounds: 524, 123, 110, 131
-	offsets: 0, 0, 117, 131
+bounds:614,84,110,131
+offsets:0,0,117,131
 R_hand
-	bounds: 636, 136, 52, 28
-	offsets: 1, 1, 55, 30
+bounds:586,28,52,28
+offsets:1,1,55,30
+rotate:90
 body
-	bounds: 2, 42, 212, 394
-	rotate: 90
+bounds:2,3,212,394
+rotate:90
 eye1
-	bounds: 398, 48, 27, 12
-	offsets: 1, 2, 30, 15
+bounds:488,68,27,12
+offsets:1,2,30,15
 eye2
-	bounds: 92, 2, 27, 38
-	offsets: 1, 1, 29, 40
+bounds:616,44,27,38
+offsets:1,1,29,40
 불쏘시개
-	bounds: 398, 62, 119, 57
-	offsets: 0, 0, 119, 58
+bounds:398,7,119,57
+offsets:0,0,119,58
 엄지
-	bounds: 858, 222, 24, 32
-	offsets: 1, 1, 26, 34
+bounds:586,2,24,32
+offsets:1,1,26,34
+rotate:90
 치마
-	bounds: 398, 121, 124, 133
-	offsets: 0, 10, 124, 143
+bounds:488,82,124,133
+offsets:0,10,124,143

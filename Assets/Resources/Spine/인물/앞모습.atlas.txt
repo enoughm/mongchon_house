@@ -1,42 +1,42 @@
 앞모습.png
-	size: 1024, 256
-	filter: Linear, Linear
-	pma: true
+size:790,228
+filter:Linear,Linear
+pma:true
 F_H
-	bounds: 539, 83, 81, 103
-	offsets: 1, 0, 82, 103
-	rotate: 90
+bounds:643,2,81,103
+offsets:1,0,82,103
 L_arm
-	bounds: 721, 168, 83, 119
-	rotate: 90
+bounds:624,107,83,119
 L_hand
-	bounds: 669, 114, 50, 50
+bounds:726,58,50,50
 Layer 3
-	bounds: 379, 105, 158, 146
-	offsets: 4, 0, 162, 146
+bounds:476,68,158,146
+offsets:4,0,162,146
+rotate:90
 Layer 5
-	bounds: 960, 187, 64, 40
-	offsets: 1, 1, 66, 42
-	rotate: 90
+bounds:601,2,64,40
+offsets:1,1,66,42
+rotate:90
 Layer 5 copy
-	bounds: 226, 19, 64, 40
-	offsets: 1, 1, 66, 42
+bounds:559,2,64,40
+offsets:1,1,66,42
+rotate:90
 R_arm
-	bounds: 842, 172, 79, 116
-	rotate: 90
+bounds:709,110,79,116
 body
-	bounds: 226, 61, 151, 190
+bounds:236,36,151,190
 eye1
-	bounds: 379, 61, 119, 42
-	offsets: 1, 1, 121, 44
+bounds:438,2,119,42
+offsets:1,1,121,44
 eye2
-	bounds: 2, 2, 117, 15
-	offsets: 1, 1, 119, 17
+bounds:319,19,117,15
+offsets:1,1,119,17
 head
-	bounds: 2, 19, 222, 232
+bounds:2,4,222,232
+rotate:90
 입
-	bounds: 644, 83, 81, 23
-	rotate: 90
+bounds:236,11,81,23
 치마
-	bounds: 539, 166, 180, 85
-	offsets: 1, 1, 182, 87
+bounds:389,46,180,85
+offsets:1,1,182,87
+rotate:90

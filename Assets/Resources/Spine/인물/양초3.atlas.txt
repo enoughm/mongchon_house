@@ -1,16 +1,15 @@
 양초3.png
-	size: 256, 256
-	filter: Linear, Linear
-	pma: true
+size:293,164
+filter:Linear,Linear
+pma:true
 1
-	bounds: 140, 70, 13, 22
+bounds:162,2,13,22
 2
-	bounds: 162, 143, 31, 42
+bounds:254,51,31,42
 3
-	bounds: 162, 187, 37, 67
+bounds:254,95,37,67
 Layer 1
-	bounds: 2, 94, 158, 160
+bounds:2,2,158,160
 받침
-	bounds: 2, 2, 90, 136
-	offsets: 1, 1, 92, 138
-	rotate: 90
+bounds:162,26,90,136
+offsets:1,1,92,138

@@ -1,12 +1,12 @@
 ﻿public class SaveManager
 {
-    public void LocalSave<T>(LocalSaveKeys key, T value)
+    public void LocalSave<T>(string key, T value)
     {
-        ES3.Save(key.ToString(), value);
+        ES3.Save(key, value);
     }
 
-    public T LocalLoad<T>(LocalSaveKeys key, T defaultValue)
+    public T LocalLoad<T>(string key, T defaultValue)
     {
-        return ES3.Load<T>(key.ToString(), defaultValue);
+        return ES3.Load<T>(key, defaultValue);
     }
 }

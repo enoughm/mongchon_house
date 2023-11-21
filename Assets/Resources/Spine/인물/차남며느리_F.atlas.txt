@@ -1,80 +1,85 @@
 차남며느리_F.png
-	size: 2048, 512
-	filter: Linear, Linear
-	pma: true
+size:1642,520
+filter:Linear,Linear
+pma:true
 F_H_1
-	bounds: 1718, 286, 85, 76
-	offsets: 0, 3, 95, 79
+bounds:1316,2,85,76
+offsets:0,3,95,79
 F_P_1
-	bounds: 1453, 220, 58, 43
+bounds:1403,35,58,43
 L_Hand
-	bounds: 1191, 60, 53, 90
-	offsets: 1, 1, 55, 92
+bounds:1537,20,53,90
+offsets:1,1,55,92
+rotate:90
 L_arm
-	bounds: 2, 21, 141, 380
-	offsets: 1, 0, 146, 380
-	rotate: 90
+bounds:2,29,141,380
+offsets:1,0,146,380
+rotate:90
 L_arm copy
-	bounds: 384, 16, 146, 286
-	offsets: 0, 120, 147, 406
-	rotate: 90
+bounds:692,140,146,286
+offsets:0,120,147,406
+rotate:90
 R_arm
-	bounds: 692, 2, 144, 276
-	offsets: 2, 1, 147, 278
+bounds:980,10,144,276
+offsets:2,1,147,278
 R_arm copy
-	bounds: 1517, 364, 146, 293
-	rotate: 90
+bounds:384,24,146,293
+rotate:90
 R_hand
-	bounds: 1137, 54, 52, 96
-	offsets: 1, 1, 54, 98
+bounds:860,14,52,96
+offsets:1,1,54,98
+rotate:90
 body
-	bounds: 692, 280, 230, 448
-	offsets: 0, 0, 240, 448
-	rotate: 90
+bounds:692,288,230,448
+offsets:0,0,240,448
+rotate:90
 eye1
-	bounds: 1995, 403, 107, 34
-	offsets: 1, 1, 109, 36
-	rotate: 90
+bounds:679,14,107,34
+offsets:1,1,109,36
 eye2
-	bounds: 2, 5, 105, 14
-	offsets: 1, 1, 107, 16
+bounds:1622,413,105,14
+offsets:1,1,107,16
+rotate:90
 hair
-	bounds: 1028, 53, 107, 70
+bounds:870,68,107,70
 head
-	bounds: 838, 34, 188, 244
+bounds:1126,27,188,244
 leg
-	bounds: 1142, 265, 245, 373
-	rotate: 90
+bounds:1142,273,245,373
+rotate:90
 고봉밥
-	bounds: 1136, 152, 124, 111
+bounds:1517,211,124,111
+rotate:90
 국
-	bounds: 1812, 407, 181, 103
+bounds:1517,337,181,103
+rotate:90
 국수1
-	bounds: 1805, 273, 132, 64
+bounds:1471,54,132,64
+rotate:90
 국수2
-	bounds: 1812, 339, 134, 66
+bounds:1537,75,134,66
+rotate:90
 숟가락
-	bounds: 1262, 138, 35, 81
-	offsets: 1, 1, 37, 83
-	rotate: 90
+bounds:1605,128,35,81
+offsets:1,1,37,83
 잣가락1
-	bounds: 672, 78, 18, 84
-	offsets: 1, 2, 20, 88
+bounds:90,9,18,84
+offsets:1,2,20,88
+rotate:90
 잣가락2
-	bounds: 838, 7, 25, 86
-	offsets: 1, 1, 28, 88
-	rotate: 90
+bounds:2,2,25,86
+offsets:1,1,28,88
+rotate:90
 조개찜
-	bounds: 1028, 125, 153, 106
-	rotate: 90
+bounds:1316,80,153,106
 조기1
-	bounds: 1262, 219, 189, 44
-	offsets: 1, 2, 192, 47
+bounds:679,94,189,44
+offsets:1,2,192,47
 조기2
-	bounds: 1262, 175, 179, 42
-	offsets: 1, 2, 181, 45
+bounds:679,50,179,42
+offsets:1,2,181,45
 조기그릇
-	bounds: 1517, 279, 199, 83
-	offsets: 22, 34, 263, 151
+bounds:1316,188,199,83
+offsets:22,34,263,151
 탁자
-	bounds: 2, 164, 688, 346
+bounds:2,172,688,346

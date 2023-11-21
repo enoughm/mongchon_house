@@ -14,6 +14,19 @@ public class GameManager : MonoBehaviour
             return _floorCamera;
         }
     }
+    
+    public Camera WallCamera
+    {
+        get
+        {
+            if(_wallCamera == null)
+                _wallCamera = GameObject.FindGameObjectWithTag("WallCam").GetComponent<Camera>();
+            return _wallCamera;
+        }
+    }
+    
+    public UrgTouchDetector WallUrgTouchDetector => _wallUrgTouchDetector;
+
 
     public bool IsSomeone => _isSomeone;
     public int FloorTouchCount => _floorUrgTouchDetector.AllScreenTouchList.Count;
@@ -27,6 +40,7 @@ public class GameManager : MonoBehaviour
     
     
     UrgTouchDetector _floorUrgTouchDetector;
+    UrgTouchDetector _wallUrgTouchDetector;
 
     private bool _isSomeone = false;
     private float _floorInvokeTime = 0;
@@ -35,20 +49,50 @@ public class GameManager : MonoBehaviour
     private List<GameObject> _stepList = new List<GameObject>();
 
     
+    private Camera _wallCamera;
+
     
     private void Awake()
     {
         //find tag
         _floorUrgTouchDetector = GameObject.FindGameObjectWithTag("FloorUrgTouchDetector").GetComponent<UrgTouchDetector>();
+        _wallUrgTouchDetector = GameObject.FindGameObjectWithTag("WallUrgTouchDetector").GetComponent<UrgTouchDetector>();
+        
     }
 
-    private void Update()
+    private void OnEnable()
+    {
+        WallUrgTouchDetector.RectObserveAction += OnWallUrgTouchDetectorRectObserveAction;
+    }
+
+    private void OnDisable()
+    {
+        WallUrgTouchDetector.RectObserveAction -= OnWallUrgTouchDetectorRectObserveAction;
+    }
+
+    private void OnWallUrgTouchDetectorRectObserveAction(string arg1, UrgGridObserverData arg2)
+    {
+        //left
+        //right
+        switch (arg1)
+        {
+            case "left":
+                Debug.Log($"[LEFT]: {arg2.averageSum}");
+                break;
+            case "right":
+                Debug.Log($"[RIGHT]: {arg2.averageSum}");
+                break;
+        }
+    }
+
+    private void LateUpdate()
     {
         FloorUpdate();
     }
 
 
-    private void FloorUpdate()
+    #region FloorUrgDetector
+private void FloorUpdate()
     {
         if (FloorTouchCount > 0)
         {
@@ -69,9 +113,12 @@ public class GameManager : MonoBehaviour
                 _isSomeone = false;
             }
         }
+        
+        FloorStepUpdate();
+    }
 
-
-
+    private void FloorStepUpdate()
+    {
         if (IsSomeone)
         {
             var allTouch = Managers.Game.FloorUrgTouchDetector.AllScreenTouchList;
@@ -97,9 +144,27 @@ public class GameManager : MonoBehaviour
 
             for (int i = 0; i < allTouch.Count; i++)
             {
-                var pos = _stepList[i].transform.position;
-                var getPos = (Vector2)Managers.Game.FloorCamera.ViewportToWorldPoint(allTouch[i].viewPortPos);
-                _stepList[i].transform.position = new Vector3(getPos.x, getPos.y, pos.z);   
+                var state = allTouch[i].touchState;
+                _stepList[i].gameObject.SetActive(state == UrgTouchState.TouchPress);
+                
+                switch (state)
+                {
+                    case UrgTouchState.Empty:
+                        break;
+                    case UrgTouchState.TouchMoment:
+                        break;
+                    case UrgTouchState.TouchDown:
+                        break;
+                    case UrgTouchState.TouchPress:
+                        var pos = _stepList[i].transform.position;
+                        var getPos = (Vector2)Managers.Game.FloorCamera.ViewportToWorldPoint(allTouch[i].viewPortPos);
+                        _stepList[i].transform.position = new Vector3(getPos.x, getPos.y, pos.z);   
+                        break;
+                    case UrgTouchState.TouchPressUp:
+                        break;
+                    case UrgTouchState.TouchClicked:
+                        break;
+                }
             }
         }
         else
@@ -111,4 +176,6 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+    #endregion
+    
 }

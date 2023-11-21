@@ -34,6 +34,7 @@ MonoBehaviour:
     - AiToolbox.Samples
     - Assembly-CSharp
     - Assembly-CSharp-firstpass
+    - AYellowpaper.SerializedCollections
     - Flexalon
     - Hierarchy2.Runtime
     - NavMeshPlus

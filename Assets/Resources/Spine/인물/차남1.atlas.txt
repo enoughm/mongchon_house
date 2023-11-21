@@ -1,66 +1,66 @@
 차남1.png
-	size: 2048, 1024
-	filter: Linear, Linear
-	pma: true
+size:2690,645
+filter:Linear,Linear
+pma:true
 Group 1
-	bounds: 2, 587, 416, 1124
-	offsets: 1, 1, 418, 1126
-	rotate: 90
+bounds:1311,227,416,1124
+offsets:1,1,418,1126
+rotate:90
 L_arm
-	bounds: 622, 439, 146, 349
-	rotate: 90
+bounds:1830,16,146,349
+rotate:90
 L_hand
-	bounds: 398, 29, 96, 158
-	offsets: 1, 1, 98, 160
-	rotate: 90
+bounds:979,16,96,158
+offsets:1,1,98,160
+rotate:90
 L_leg copy
-	bounds: 251, 153, 150, 432
-	offsets: 1, 1, 152, 434
+bounds:1159,211,150,432
+offsets:1,1,152,434
 L_leg
-	bounds: 251, 153, 150, 432
-	offsets: 1, 1, 152, 434
+bounds:1159,211,150,432
+offsets:1,1,152,434
 Layer 18
-	bounds: 2, 2, 52, 83
-	rotate: 90
+bounds:1235,126,52,83
 Layer 19
-	bounds: 558, 44, 83, 81
+bounds:1152,125,83,81
+rotate:90
 Layer 20
-	bounds: 251, 60, 145, 91
+bounds:1005,117,145,91
 R_arm
-	bounds: 622, 297, 140, 347
-	offsets: 0, 76, 140, 423
-	rotate: 90
+bounds:2181,22,140,347
+offsets:0,76,140,423
+rotate:90
 R_hand
-	bounds: 973, 490, 95, 149
-	offsets: 1, 1, 97, 151
-	rotate: 90
+bounds:1139,20,95,149
+offsets:1,1,97,151
+rotate:90
 R_leg
-	bounds: 1882, 570, 152, 433
-	offsets: 1, 1, 155, 435
+bounds:1005,210,152,433
+offsets:1,1,155,435
 body
-	bounds: 2, 56, 247, 529
-	offsets: 0, 0, 247, 533
+bounds:756,114,247,529
+offsets:0,0,247,533
 eye1
-	bounds: 973, 452, 115, 36
-	offsets: 1, 1, 117, 38
+bounds:1830,189,115,36
+offsets:1,1,117,38
 eye2
-	bounds: 87, 40, 117, 14
-	offsets: 1, 1, 119, 16
+bounds:2,2,117,14
+offsets:1,1,119,16
 foot1
-	bounds: 643, 19, 115, 103
+bounds:862,9,115,103
 foot2
-	bounds: 760, 18, 105, 104
+bounds:756,7,105,104
+rotate:90
 head
-	bounds: 403, 294, 217, 291
+bounds:1537,8,217,291
+rotate:90
 leg1
-	bounds: 403, 127, 247, 165
+bounds:2437,164,247,165
 legg2
-	bounds: 652, 124, 245, 171
+bounds:1290,38,245,171
 legup1
-	bounds: 1882, 317, 251, 155
-	rotate: 90
+bounds:2437,488,251,155
 legup2
-	bounds: 899, 46, 249, 155
-	rotate: 90
+bounds:2437,331,249,155
 포획망
-	bounds: 1128, 378, 752, 625
+bounds:2,18,752,625

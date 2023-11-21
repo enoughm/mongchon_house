@@ -1,79 +1,77 @@
 장남.png
-	size: 4096, 512
-	filter: Linear, Linear
-	pma: true
+size:2529,520
+filter:Linear,Linear
+pma:true
 L_arm
-	bounds: 657, 119, 186, 418
-	offsets: 0, 39, 186, 457
-	rotate: 90
+bounds:657,140,186,418
+offsets:0,39,186,457
+rotate:90
 L_foot
-	bounds: 3950, 362, 122, 135
+bounds:1077,191,122,135
 L_hand
-	bounds: 1474, 224, 95, 160
-	offsets: 1, 1, 104, 162
-	rotate: 90
+bounds:1077,94,95,160
+offsets:1,1,104,162
+rotate:90
 L_leg
-	bounds: 2042, 244, 288, 253
+bounds:2042,265,288,253
 L_leg1
-	bounds: 2332, 298, 199, 338
-	offsets: 1, 1, 201, 340
-	rotate: 90
+bounds:1272,2,199,338
+offsets:1,1,201,340
 L_legup
-	bounds: 3671, 254, 277, 243
+bounds:1963,18,277,243
 R_arm
-	bounds: 1272, 321, 176, 410
-	rotate: 90
+bounds:1272,342,176,410
+rotate:90
 R_foot
-	bounds: 1350, 184, 122, 135
+bounds:2332,383,122,135
 R_hand
-	bounds: 3950, 274, 86, 110
-	rotate: 90
+bounds:266,8,86,110
+rotate:90
 R_leg
-	bounds: 3383, 261, 286, 236
+bounds:1675,25,286,236
 R_leg1
-	bounds: 2672, 297, 200, 331
-	offsets: 1, 1, 202, 333
-	rotate: 90
+bounds:1473,9,200,331
+offsets:1,1,202,333
 R_lrgup
-	bounds: 1077, 64, 271, 241
+bounds:2242,22,271,241
 a1
-	bounds: 321, 22, 51, 89
-	rotate: 90
+bounds:1076,41,51,89
+rotate:90
 a2
-	bounds: 223, 24, 49, 96
-	rotate: 90
+bounds:477,45,49,96
+rotate:90
 a3
-	bounds: 129, 15, 58, 92
-	rotate: 90
+bounds:206,2,58,92
 b1
-	bounds: 1350, 104, 97, 78
+bounds:378,16,97,78
 b2
-	bounds: 1636, 257, 62, 39
-	rotate: 90
+bounds:1035,76,62,39
+rotate:90
 b3
-	bounds: 2, 2, 71, 125
-	rotate: 90
+bounds:2456,393,71,125
 body
-	bounds: 2, 75, 422, 653
-	rotate: 90
+bounds:2,96,422,653
+rotate:90
 eye1
-	bounds: 2332, 265, 137, 31
-	offsets: 6, 3, 144, 35
+bounds:1239,189,137,31
+offsets:6,3,144,35
+rotate:90
 eye2
-	bounds: 657, 108, 135, 9
-	offsets: 1, 1, 137, 11
+bounds:1201,191,135,9
+offsets:1,1,137,11
+rotate:90
 head
-	bounds: 1684, 242, 255, 356
-	rotate: 90
+bounds:1684,263,255,356
+rotate:90
 창
-	bounds: 3005, 304, 75, 202
-	rotate: 90
+bounds:2,19,75,202
+rotate:90
 창막대기
-	bounds: 657, 307, 190, 613
-	rotate: 90
+bounds:657,328,190,613
+rotate:90
 화살
-	bounds: 3209, 283, 96, 148
-	rotate: 90
+bounds:2332,285,96,148
+rotate:90
 화살막대기
-	bounds: 3005, 381, 116, 376
-	rotate: 90
+bounds:657,22,116,376
+rotate:90
