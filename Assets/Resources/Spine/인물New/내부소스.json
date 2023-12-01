@@ -1,0 +1,63 @@
+{
+"skeleton": {
+	"hash": "RSgJc1XcmIU",
+	"spine": "4.2.09-beta",
+	"x": -2271.24,
+	"y": -31.29,
+	"width": 4589,
+	"height": 1130,
+	"images": "../백제_스파인_모음/interver_01/",
+	"audio": "C:/Users/home/Desktop/백제_스파인_모음/1_집내부공간"
+},
+"bones": [
+	{ "name": "root" }
+],
+"slots": [
+	{ "name": "바닥", "bone": "root", "attachment": "바닥" },
+	{ "name": "집내부", "bone": "root", "attachment": "집내부" },
+	{ "name": "탁자", "bone": "root", "attachment": "탁자" },
+	{ "name": "중앙항아리", "bone": "root", "attachment": "중앙항아리" },
+	{ "name": "통나무", "bone": "root", "attachment": "통나무" },
+	{ "name": "사각멍석1", "bone": "root", "attachment": "사각멍석1" },
+	{ "name": "사각멍석2", "bone": "root", "attachment": "사각멍석2" },
+	{ "name": "짚작업", "bone": "root", "attachment": "짚작업" },
+	{ "name": "옆_도자기", "bone": "root", "attachment": "옆_도자기" }
+],
+"skins": [
+	{
+		"name": "default",
+		"attachments": {
+			"바닥": {
+				"바닥": { "x": 23.26, "y": 358.71, "width": 4589, "height": 780 }
+			},
+			"사각멍석1": {
+				"사각멍석1": { "x": 190.76, "y": 195.71, "width": 772, "height": 394 }
+			},
+			"사각멍석2": {
+				"사각멍석2": { "x": 852.76, "y": 204.21, "width": 692, "height": 389 }
+			},
+			"옆_도자기": {
+				"옆_도자기": { "x": -1621.74, "y": 373.71, "width": 349, "height": 244 }
+			},
+			"중앙항아리": {
+				"중앙항아리": { "x": 331.76, "y": 520.71, "width": 634, "height": 326 }
+			},
+			"집내부": {
+				"집내부": { "x": 15.76, "y": 593.21, "width": 3878, "height": 1011 }
+			},
+			"짚작업": {
+				"짚작업": { "x": -895.74, "y": 323.71, "width": 1743, "height": 584 }
+			},
+			"탁자": {
+				"탁자": { "x": 1506.76, "y": 467.71, "width": 582, "height": 336 }
+			},
+			"통나무": {
+				"통나무": { "x": 1019.76, "y": 429.21, "width": 342, "height": 201 }
+			}
+		}
+	}
+],
+"animations": {
+	"animation": {}
+}
+}

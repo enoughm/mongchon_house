@@ -1,0 +1,16 @@
+양초4.png
+size:313,162
+filter:Linear,Linear
+pma:true
+1
+bounds:274,25,13,22
+2
+bounds:274,49,31,42
+3
+bounds:274,93,37,67
+Layer 1
+bounds:2,2,158,160
+rotate:90
+받침
+bounds:164,10,108,150
+offsets:1,1,110,179

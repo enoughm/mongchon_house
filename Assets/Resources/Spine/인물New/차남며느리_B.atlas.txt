@@ -1,0 +1,21 @@
+차남며느리_B.png
+size:611,534
+filter:Linear,Linear
+pma:true
+B_H_1
+bounds:2,12,70,103
+offsets:8,4,78,107
+rotate:90
+B_L_arm
+bounds:425,2,148,283
+offsets:0,99,148,382
+B_P_1
+bounds:107,25,23,57
+B_body
+bounds:2,84,232,448
+offsets:8,0,240,448
+B_head
+bounds:236,10,187,275
+leg copy
+bounds:236,287,245,373
+rotate:90
