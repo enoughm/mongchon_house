@@ -12,3 +12,4 @@ UserSettings/
 *.csproj
 *.tmp
 *.log
+_OUTPUT/

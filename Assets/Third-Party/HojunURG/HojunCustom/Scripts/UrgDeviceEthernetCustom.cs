@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * \file
  * \brief Get distance data from Ethernet type URG
  * \author Jun Fujimoto

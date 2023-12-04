@@ -10,9 +10,11 @@ public class UrgTouchDetectorSettingCanvas : MonoBehaviour
     
     [SerializeField] private Button debugOnOffButton;
     [SerializeField] private Button settingOnOffButton;
+    [SerializeField] private Button ignoreOnOffButton;
     
     [SerializeField] private GameObject debugRoot;
     [SerializeField] private GameObject settingRoot;
+    [SerializeField] private GameObject ignoreRoot;
     
     [SerializeField] private InputField hokuyoIP;
     [SerializeField] private InputField screenAreaSizeX;
@@ -25,6 +27,8 @@ public class UrgTouchDetectorSettingCanvas : MonoBehaviour
     [SerializeField] private InputField realAreaOffsetY;
     [SerializeField] private InputField objThreshold;
     [SerializeField] private InputField minWidth;
+    [SerializeField] private InputField xOffsetFromSensedPoint;
+    [SerializeField] private InputField yOffsetFromSensedPoint;
     
     [SerializeField] private Button curButton;
     [SerializeField] private Button applyButton;
@@ -48,6 +52,10 @@ public class UrgTouchDetectorSettingCanvas : MonoBehaviour
         settingOnOffButton.onClick.AddListener(() =>
         {
             settingRoot.gameObject.SetActive(!settingRoot.gameObject.activeSelf);
+        });
+        ignoreOnOffButton.onClick.AddListener(() =>
+        {
+            ignoreRoot.gameObject.SetActive(!ignoreRoot.gameObject.activeSelf);
         });
     }
 
@@ -82,7 +90,9 @@ public class UrgTouchDetectorSettingCanvas : MonoBehaviour
         realAreaOffsetY.text = urgTouchDetector.UrgSensing.actuallySensingAreaOffset.y.ToString();
         objThreshold.text = urgTouchDetector.UrgSensing.objThreshold.ToString();
         minWidth.text = urgTouchDetector.UrgSensing.minWidth.ToString();
-        
+        xOffsetFromSensedPoint.text = urgTouchDetector.UrgSensing.xOffsetFromDetectPos.ToString();
+        yOffsetFromSensedPoint.text = urgTouchDetector.UrgSensing.yOffsetFromDetectPos.ToString();
+
         gridView.Load(urgTouchDetector.UrgGridDataSettingArray);
     }
 
@@ -103,6 +113,8 @@ public class UrgTouchDetectorSettingCanvas : MonoBehaviour
             urgTouchDetector.UrgSensing.actuallySensingAreaOffset = new Vector2(float.Parse(realAreaOffsetX.text), float.Parse(realAreaOffsetY.text));
             urgTouchDetector.UrgSensing.minWidth = float.Parse(minWidth.text);
             urgTouchDetector.UrgSensing.objThreshold = float.Parse(objThreshold.text);
+            urgTouchDetector.UrgSensing.xOffsetFromDetectPos = float.Parse(xOffsetFromSensedPoint.text);
+            urgTouchDetector.UrgSensing.yOffsetFromDetectPos = float.Parse(yOffsetFromSensedPoint.text);
 
             urgTouchDetector.DataSave();
         }

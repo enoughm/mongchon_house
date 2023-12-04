@@ -16,7 +16,7 @@ MonoBehaviour:
   gridAverageAcceptThreshold: 1.5
   gridAreaCountCheckThreshold: 2
   competitionApproveThreshold: 0.65
-  gridAverageMaxCollectCount: 3
+  gridAverageMaxCollectCount: 1
   touchCheckSpeed: 1
   touchCheckInGridArea: 0
   touchDownCheckDuration: 0.1

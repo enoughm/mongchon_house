@@ -1,11 +1,9 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using AYellowpaper.SerializedCollections;
+using UniRx;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
 
 public enum UrgTouchState
 {
@@ -22,8 +20,6 @@ public enum UrgTouchState
     TouchClicked,
 }
 
-
-
 public class UrgTouchDetector : MonoBehaviour
 {
     public Action<UrgTouchState, Vector2> HokuyoAction = null;
@@ -35,7 +31,6 @@ public class UrgTouchDetector : MonoBehaviour
     public UrgSensingCustom UrgSensing => urgSensing;
     public List<RealTouchData> AllScreenTouchList => _allScreenTouchList;
     public Vector2 TouchGrids => settingData.touchGrid;
-   // public UrgTouchData[,] TouchGridItems => _touchGridItems;
     public UrgGridData[,] UrgGridItems => _urgGridArray;
 
     public List<UrgGridData> UrgGridItemsParsedToList => ChangeArrayToOneDimensionList(_urgGridArray);
@@ -68,8 +63,9 @@ public class UrgTouchDetector : MonoBehaviour
 
     [Header("rect observe")]
     [SerializeField] private bool checkMouseViewPortPos;
-    [SerializeField] private SerializedDictionary<string, Rect> registeredObserver;
-    
+    [SerializeField] private SerializedDictionary<string, AreaDetector> detectors;
+
+    private SerializedDictionary<string, Rect> _registeredObserver = new SerializedDictionary<string, Rect>();
     private List<RealTouchData> _allScreenTouchList = new List<RealTouchData>();
     
     //grid data 관련 
@@ -81,10 +77,6 @@ public class UrgTouchDetector : MonoBehaviour
     private int _targetDisplay;
     private Vector2 _touchGridCellSize;
 
-
-
-
-
     private void Awake()
     {
         _targetDisplay = targetCam.targetDisplay;
@@ -92,38 +84,23 @@ public class UrgTouchDetector : MonoBehaviour
         ScreenHeight = targetCam.pixelHeight;
 
         CreateTouchGrid();
+        RegisteredRectObserver();
+        Loom.Initialize();
+        Application.targetFrameRate = 60;
     }
 
     private void Start()
     {
         DataLoad();
         urgControl.StartTcp(HokuyoIP);
+        urgSensing.OnReadMDAction = list => Loom.QueueOnMainThread(()=>OnReadMDUpdate(list));
     }
 
-    /// <summary>
-    /// rect observe
-    /// </summary>
-    private void UpdateRect()
+    public bool TryGetDetector(string keyName, out AreaDetector detector)
     {
-        foreach (var item in registeredObserver)
-        {
-            var list = UrgGridItemsParsedToList.Where(data => item.Value.Contains(data.gridViewPortPos)).ToList();
-            var total = list.Sum(data => data.sensedDataCountAverage);
-            if (list.Count > 0 && total > 0)
-            {
-                UrgGridObserverData observerData = new UrgGridObserverData()
-                {
-                    data = new List<UrgGridData>(),
-                    averageSum = 0,
-                };
-                observerData.data = list;
-                observerData.averageSum = list.Sum(data => data.sensedDataCountAverage);
-                RectObserveAction?.Invoke(item.Key, observerData);
-            }
-        }
-        //옵저버 데이터를 Action으로 뺴준다
+        return detectors.TryGetValue(keyName, out detector);
     }
-
+   
     private void Update()
     {
         //디버그 및 세팅 UI 띄우기
@@ -132,19 +109,20 @@ public class UrgTouchDetector : MonoBehaviour
         else if(Input.GetKeyDown(KeyCode.X))
             settingCanvas.gameObject.SetActive(!settingCanvas.gameObject.activeSelf);
 
-        
         if (checkMouseViewPortPos)
         {
             Vector3 mousePos = Input.mousePosition;
             Vector3 viewportPos = targetCam.ScreenToViewportPoint(mousePos);
             Debug.Log(viewportPos);
         }
+    }
 
-            //grid data 초기화 (화면을 그리드로 나누고, 그리드 당 데이터의 개수를 확인하는)
+    private void OnReadMDUpdate(List<UrgSensingCustom.ConvertedSensedObject> allSensedDatas)
+    {
+        //grid data 초기화 (화면을 그리드로 나누고, 그리드 당 데이터의 개수를 확인하는)
         InitGridData();
         
         //실제 감지 영역안의 모든 감지 데이터를 받아온다.
-        var allSensedDatas = urgSensing.convertedAllSensedObjsInRealArea;
         for (int i = 0; i < allSensedDatas.Count; i++)
         {
             var targetPos = GetGridPosFromViewportPos(allSensedDatas[i].viewPortPos);
@@ -159,7 +137,7 @@ public class UrgTouchDetector : MonoBehaviour
             }
             catch (Exception e)
             {
-                Debug.Log($"viewPortPos:{allSensedDatas[i].viewPortPos}");
+                //Debug.Log($"viewPortPos:{allSensedDatas[i].viewPortPos}");
                 Debug.Log($"targetPos:{targetPos}, x:{x}, y:{y}");
                 Debug.Log($"_urgGridArray [{_urgGridArray.GetLength(0)}, {_urgGridArray.GetLength(1)}]");
             }
@@ -304,16 +282,34 @@ public class UrgTouchDetector : MonoBehaviour
         
         RemoveUrgTouchData();
 
-        //touch data 초기화
-        // InitTouchData();
-        // var datas = urgSensing.convertedSensedObjsInRealArea;
-        // for (int i = 0; i < datas.Count; i++)
-        // {
-        //     InsertUrgTouchData(datas[i].viewPortPos);
-        // }
-        // RemoveUrgTouchData();
-
         UpdateRect();
+    }
+    
+    private void UpdateRect()
+    {
+        foreach (var item in _registeredObserver)
+        {
+            //Debug.Log($"data.gridViewPortPos: {item.Value}");
+            var list = UrgGridItemsParsedToList.Where(data =>
+            {
+                bool contains = item.Value.Contains(data.gridViewPortPos);
+                //if(contains)
+                //Debug.Log($"data.gridViewPortPos: {data.gridViewPortPos}");
+                return contains;
+            }).ToList();
+            var total = list.Sum(data => data.sensedDataCountAverage);
+            if (list.Count > 0)
+            {
+                UrgGridObserverData observerData = new UrgGridObserverData()
+                {
+                    data = new List<UrgGridData>(),
+                    averageSum = 0,
+                };
+                observerData.data = list;
+                observerData.averageSum = total;
+                RectObserveAction?.Invoke(item.Key, observerData);
+            }
+        }
     }
     
      private void CreateTouchGrid()
@@ -342,6 +338,26 @@ public class UrgTouchDetector : MonoBehaviour
             }
         }
     }
+     
+     private void RegisteredRectObserver()
+     {
+         foreach (var item in detectors)
+         {
+             var rectTransform = item.Value.RectTr;
+            
+             // Viewport Rect 값을 계산
+             Rect viewportRect = new Rect(
+                 rectTransform.anchoredPosition.x / ScreenWidth,
+                 rectTransform.anchoredPosition.y / ScreenHeight,
+                 rectTransform.sizeDelta.x / ScreenWidth,
+                 rectTransform.sizeDelta.y / ScreenHeight
+             );
+             // Viewport Rect 값을 사용
+             //Debug.Log("Viewport Rect: " + viewportRect);
+             _registeredObserver.Add(item.Key, viewportRect);
+             item.Value.SetData(item.Key, this);
+         }
+     }
 
     private void DataLoad()
     {
@@ -356,6 +372,8 @@ public class UrgTouchDetector : MonoBehaviour
         urgSensing.actuallySensingAreaOffset.y = PlayerPrefs.GetFloat($"{_targetDisplay}_realAreaOffsetY", urgSensing.actuallySensingAreaOffset.y);
         urgSensing.objThreshold = PlayerPrefs.GetFloat($"{_targetDisplay}_objThreshold", urgSensing.objThreshold);
         urgSensing.minWidth = PlayerPrefs.GetFloat($"{_targetDisplay}_minWidth", urgSensing.minWidth);
+        urgSensing.xOffsetFromDetectPos = PlayerPrefs.GetFloat($"{_targetDisplay}_xOffsetFromDetectPos", urgSensing.xOffsetFromDetectPos);
+        urgSensing.yOffsetFromDetectPos = PlayerPrefs.GetFloat($"{_targetDisplay}_yOffsetFromDetectPos", urgSensing.yOffsetFromDetectPos);
         LoadGridDataSettingArray();
     }
     
@@ -372,6 +390,8 @@ public class UrgTouchDetector : MonoBehaviour
         PlayerPrefs.SetFloat($"{_targetDisplay}_realAreaOffsetY", urgSensing.actuallySensingAreaOffset.y);
         PlayerPrefs.SetFloat($"{_targetDisplay}_objThreshold", urgSensing.objThreshold);
         PlayerPrefs.SetFloat($"{_targetDisplay}_minWidth", urgSensing.minWidth);
+        PlayerPrefs.SetFloat($"{_targetDisplay}_xOffsetFromDetectPos", urgSensing.xOffsetFromDetectPos);
+        PlayerPrefs.SetFloat($"{_targetDisplay}_yOffsetFromDetectPos", urgSensing.yOffsetFromDetectPos);
         SaveGridDataSettingArray();
     }
 
@@ -516,7 +536,6 @@ public class UrgTouchDetector : MonoBehaviour
                 break;
             
             var item = _allScreenTouchList[i];
-            var isScreenEdge = IsScreenEdgePosition(item.viewPortPos);
 
             // 한 명의 경우라면 아래 코드가 맞음
             // item.viewPortPos = Vector2.Lerp(_allScreenTouchList[i].viewPortPos, viewPortPos, Time.deltaTime);
@@ -577,9 +596,6 @@ public class UrgTouchDetector : MonoBehaviour
         for (int i = 0; i < _allScreenTouchList.Count; i++)
         {
             var item = _allScreenTouchList[i];
-            //bool isEdge = IsEdgePosition(item.viewPortPos);
-            var isScreenEdge = IsScreenEdgePosition(item.viewPortPos);
-
             
             bool merged = false;
             for (int j = 0; j < _allScreenTouchList.Count; j++)
@@ -601,8 +617,7 @@ public class UrgTouchDetector : MonoBehaviour
                 item.emptyTime += Time.deltaTime;
                 if (item.emptyTime > settingData.touchCheckingDuration)
                 {
-                    //if (item.liveTime < settingData.touchInvokeDuration || merged || isEdge || isScreenEdge)
-                    if (item.liveTime < settingData.touchInvokeDuration || merged || isScreenEdge || item.touchState != UrgTouchState.TouchPress)
+                    if (item.liveTime < settingData.touchInvokeDuration || merged || item.touchState != UrgTouchState.TouchPress)
                     {
                         item.touchState = UrgTouchState.Empty;
                     }

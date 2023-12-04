@@ -41,6 +41,8 @@ public class UrgTouchDetectorSettingGridViewItem : MonoBehaviour, IPointerEnterH
     public void SetData(Vector2 gridPos, bool active)
     {
         _gridPos = gridPos;
+        if(_toggle == null)
+            _toggle = GetComponent<Toggle>();
         _toggle.isOn = active;
     }
 

@@ -6,6 +6,8 @@ using UnityEngine.Serialization;
 
 public class UrgSensingCustom : MonoBehaviour
 {
+    public Action<List<ConvertedSensedObject>> OnReadMDAction;
+    
     [Header("sensing params (meter)")]
     public Vector2 sensingAreaSize = new Vector2(1, 1);
     public Vector2 sensingAreaOffset = new Vector2(1, 1);
@@ -19,6 +21,8 @@ public class UrgSensingCustom : MonoBehaviour
     [Range(0.001f, 2.0f)]
     public float objThreshold = 0.5f;
     public float minWidth = 0.01f;
+    public float xOffsetFromDetectPos = 0;
+    public float yOffsetFromDetectPos = 0;
 
     private Bounds _sensingArea;
     private Bounds _sensingScreenArea;
@@ -155,8 +159,8 @@ public class UrgSensingCustom : MonoBehaviour
     void GetPointFromDistance(int step, float distance, ref Vector3 pos)
     {
         var angle = step * urgControl.angleDelta - urgControl.angleOffset + 90f;
-        pos.x = Mathf.Cos(angle * Mathf.Deg2Rad) * distance;
-        pos.z = Mathf.Sin(angle * Mathf.Deg2Rad) * distance;
+        pos.x = Mathf.Cos(angle * Mathf.Deg2Rad) * distance + xOffsetFromDetectPos;
+        pos.z = Mathf.Sin(angle * Mathf.Deg2Rad) * distance + yOffsetFromDetectPos;
     }
     
     void OnReadMD(List<long> distances)
@@ -243,6 +247,9 @@ public class UrgSensingCustom : MonoBehaviour
         
         convertedAllSensedObjsInRealArea.Clear();
         convertedAllSensedObjsInRealArea = ExtractSensedDataOnlyInRealArea(convertedAllSensedObjsInArea);
+        
+        var copiedList = new List<ConvertedSensedObject>(convertedAllSensedObjsInRealArea);
+        OnReadMDAction?.Invoke(copiedList);
     }
 
     private ConvertedSensedObject GetConvertedSensedObject(ref Rect rect, SensedObject sensedObject)

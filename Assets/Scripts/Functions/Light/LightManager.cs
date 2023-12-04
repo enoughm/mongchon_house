@@ -20,8 +20,8 @@ public class LightManager : MonoBehaviour
     {
         middleCandleController.LightOff();
         float time = 0;
-        float darkIntensity = 0.4f;
-        float fromIntensity = .8f;
+        float darkIntensity = 0.2f;
+        float fromIntensity = .5f;
         float ratio = 0;
         while (time < duration)
         {
@@ -43,8 +43,8 @@ public class LightManager : MonoBehaviour
         middleCandleController.LightOn(out var delay, null);
         yield return new WaitForSeconds(delay * 0.66f);
         float time = 0;
-        float darkIntensity = 0.4f;
-        float lightIntensity = .8f;
+        float darkIntensity = 0.5f;
+        float lightIntensity = .5f;
         float ratio = 0;
         while (time < duration)
         {
