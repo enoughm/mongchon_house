@@ -28,11 +28,11 @@ public class MainScene : BaseScene
     {
         if (isSomeone)
         {
-            _lightManager.ToLight(1);
+            _lightManager.ToLight(3);
         }
         else
         {
-            _lightManager.ToDark(1);
+            _lightManager.ToDark(3);
         }
     }
 

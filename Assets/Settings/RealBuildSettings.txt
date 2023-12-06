@@ -1,8 +1,8 @@
 {
     "buildType":"Real",
     "defaultCompany": "morm",
-    "productName": "mongchon_house",
-    "applicationIdentifier": "com.morm.mongchon_house",
+    "productName": "mongchon_house_floor",
+    "applicationIdentifier": "com.morm.mongchon_house_floor",
     "useAndroidCustomKeystore": false,
     "keyaliasPass":"07110711",
     "keystorePass":"07110711",
@@ -10,6 +10,6 @@
     "androidKeystorePass":"07110711",
     "androidKeystoreName":"Assets/Resources/TobiiOcumenLicense/EyeDR_HMD.keystore",
     "androidKeyaliasName":"eyedr_hmd",
-    "resolutionWidth" : 2856,
-    "resolutionHeight" : 1200
+    "resolutionWidth" : 2828,
+    "resolutionHeight" : 1920
 }

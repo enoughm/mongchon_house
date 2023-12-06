@@ -21,7 +21,7 @@ public class LightManager : MonoBehaviour
         middleCandleController.LightOff();
         float time = 0;
         float darkIntensity = 0.2f;
-        float fromIntensity = .5f;
+        float fromIntensity = 1f;
         float ratio = 0;
         while (time < duration)
         {
@@ -44,7 +44,7 @@ public class LightManager : MonoBehaviour
         yield return new WaitForSeconds(delay * 0.66f);
         float time = 0;
         float darkIntensity = 0.5f;
-        float lightIntensity = .5f;
+        float lightIntensity = 1f;
         float ratio = 0;
         while (time < duration)
         {

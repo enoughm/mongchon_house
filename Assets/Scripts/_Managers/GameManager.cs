@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
         }
     }
     
-    public UrgTouchDetector WallUrgTouchDetector => _wallUrgTouchDetector;
+    //public UrgTouchDetector WallUrgTouchDetector => _wallUrgTouchDetector;
 
 
     public bool IsSomeone => _isSomeone;
@@ -54,28 +54,18 @@ public class GameManager : MonoBehaviour
     
     private void Awake()
     {
-        Debug.Log("displays connected: " + Display.displays.Length);
-        // Display.displays[0] is the primary, default display and is always ON.
-        // Check if additional displays are available and activate each.
-        if (Display.displays.Length > 1)
-            Display.displays[1].Activate();
-        if (Display.displays.Length > 2)
-            Display.displays[2].Activate();
-        
-        //find tag
         _floorUrgTouchDetector = GameObject.FindGameObjectWithTag("FloorUrgTouchDetector").GetComponent<UrgTouchDetector>();
-        _wallUrgTouchDetector = GameObject.FindGameObjectWithTag("WallUrgTouchDetector").GetComponent<UrgTouchDetector>();
-        
+       // _wallUrgTouchDetector = GameObject.FindGameObjectWithTag("WallUrgTouchDetector").GetComponent<UrgTouchDetector>();
     }
 
     private void OnEnable()
     {
-        WallUrgTouchDetector.RectObserveAction += OnWallUrgTouchDetectorRectObserveAction;
+        //WallUrgTouchDetector.RectObserveAction += OnWallUrgTouchDetectorRectObserveAction;
     }
 
     private void OnDisable()
     {
-        WallUrgTouchDetector.RectObserveAction -= OnWallUrgTouchDetectorRectObserveAction;
+        //WallUrgTouchDetector.RectObserveAction -= OnWallUrgTouchDetectorRectObserveAction;
     }
 
     private void OnWallUrgTouchDetectorRectObserveAction(string arg1, UrgGridObserverData arg2)
