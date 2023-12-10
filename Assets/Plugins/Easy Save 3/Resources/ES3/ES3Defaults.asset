@@ -35,7 +35,9 @@ MonoBehaviour:
     - Assembly-CSharp
     - Assembly-CSharp-firstpass
     - AYellowpaper.SerializedCollections
+    - FiniteStateMachineAssembly
     - Flexalon
+    - HierarchicalFiniteStateMachineAssembly
     - Hierarchy2.Runtime
     - NavMeshPlus
     - SingularityGroup.HotReload.Runtime

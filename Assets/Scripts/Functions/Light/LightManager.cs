@@ -1,15 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Security.Cryptography;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
 public class LightManager : MonoBehaviour
 {
     [SerializeField] Light2D globalLight;
-    [SerializeField] CandleController middleCandleController;
+    [SerializeField] List<CandleController> candleControllers = new List<CandleController>();
 
-    
+    public float brightGlobalIntensity = 0.6f;
+    public float darkGlobalIntensity = 0.2f;
+
+    [Button]
     public void ToDark(float duration)
     {
         StopAllCoroutines();
@@ -18,20 +21,20 @@ public class LightManager : MonoBehaviour
 
     IEnumerator CoToDark(float duration)
     {
-        middleCandleController.LightOff();
+        candleControllers.ForEach(c => c.LightOff());
+
         float time = 0;
-        float darkIntensity = 0.2f;
-        float fromIntensity = .5f;
-        float ratio = 0;
+        float targetValue = brightGlobalIntensity - darkGlobalIntensity;
         while (time < duration)
         {
             time += Time.deltaTime;
-            ratio = time / duration;
-            globalLight.intensity = fromIntensity - (fromIntensity - darkIntensity) * ratio;
+            var ratio = time / duration;
+            globalLight.intensity = brightGlobalIntensity - (targetValue * ratio);
             yield return null;
         }
     }
-    
+
+    [Button]
     public void ToLight(float duration)
     {
         StopAllCoroutines();
@@ -40,17 +43,13 @@ public class LightManager : MonoBehaviour
     
     IEnumerator CoToLight(float duration)
     {
-        middleCandleController.LightOn(out var delay, null);
-        yield return new WaitForSeconds(delay * 0.66f);
         float time = 0;
-        float darkIntensity = 0.5f;
-        float lightIntensity = .5f;
-        float ratio = 0;
+        float targetValue = brightGlobalIntensity - darkGlobalIntensity;
         while (time < duration)
         {
             time += Time.deltaTime;
-            ratio = time / duration;
-            globalLight.intensity = darkIntensity + (lightIntensity - darkIntensity) * ratio;
+            var ratio = time / duration;
+            globalLight.intensity = darkGlobalIntensity + (targetValue * ratio);
             yield return null;
         }
 

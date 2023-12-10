@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -27,18 +28,10 @@ public class GameManager : MonoBehaviour
     
     public UrgTouchDetector WallUrgTouchDetector => _wallUrgTouchDetector;
 
-
     public bool IsSomeone => _isSomeone;
-    public int FloorTouchCount => _floorUrgTouchDetector.AllScreenTouchList.Count;
     public UrgTouchDetector FloorUrgTouchDetector => _floorUrgTouchDetector;
     public List<GameObject> StepList => _stepList;
 
-    
-    
-    public float floorEmptyTimeMax = 10;
-    public float floorInvokeTimeMax = 3;
-    
-    
     UrgTouchDetector _floorUrgTouchDetector;
     UrgTouchDetector _wallUrgTouchDetector;
 
@@ -54,9 +47,24 @@ public class GameManager : MonoBehaviour
     
     private void Awake()
     {
-        //find tag
-        //_floorUrgTouchDetector = GameObject.FindGameObjectWithTag("FloorUrgTouchDetector").GetComponent<UrgTouchDetector>();
         _wallUrgTouchDetector = GameObject.FindGameObjectWithTag("WallUrgTouchDetector").GetComponent<UrgTouchDetector>();
+    }
+
+    private void Start()
+    {
+        Managers.Game.ToInitialize();
+    }
+
+    [Button]
+    public void ToInitialize()
+    {
+        FindObjectOfType<BabyStateMachine>().TurnOffLight();
+    }
+
+    [Button]
+    public void Someone()
+    {
+        FindObjectOfType<BabyStateMachine>().TurnOnLight();
     }
 
     private void OnEnable()
@@ -83,98 +91,4 @@ public class GameManager : MonoBehaviour
                 break;
         }
     }
-
-    private void LateUpdate()
-    {
-        //FloorUpdate();
-    }
-
-
-    #region FloorUrgDetector
-private void FloorUpdate()
-    {
-        if (FloorTouchCount > 0)
-        {
-            _floorInvokeTime += Time.deltaTime;
-            if (_floorInvokeTime > floorInvokeTimeMax)
-            {
-                _floorEmptyTime = 0;
-                _isSomeone = true;
-            }
-        }
-
-        if (FloorTouchCount == 0)
-        {
-            _floorEmptyTime += Time.deltaTime;
-            if (_floorEmptyTime > floorEmptyTimeMax)
-            {
-                _floorInvokeTime = 0;
-                _isSomeone = false;
-            }
-        }
-        
-        FloorStepUpdate();
-    }
-
-    private void FloorStepUpdate()
-    {
-        if (IsSomeone)
-        {
-            var allTouch = Managers.Game.FloorUrgTouchDetector.AllScreenTouchList;
-        
-        
-            while (_stepList.Count < allTouch.Count)
-            {
-                var step = Managers.Resource.Instantiate("Floor/Step");
-                _stepList.Add(step);
-            }
-
-            if (_stepList.Count > allTouch.Count)
-            {
-                for (int i = 0; i < _stepList.Count; i++)
-                {
-                    if (i > allTouch.Count - 1)
-                    {
-                        Managers.Resource.Destroy(_stepList[i]);
-                        _stepList.RemoveAt(i);
-                    }
-                }
-            }
-
-            for (int i = 0; i < allTouch.Count; i++)
-            {
-                var state = allTouch[i].touchState;
-                _stepList[i].gameObject.SetActive(state == UrgTouchState.TouchPress);
-                
-                switch (state)
-                {
-                    case UrgTouchState.Empty:
-                        break;
-                    case UrgTouchState.TouchMoment:
-                        break;
-                    case UrgTouchState.TouchDown:
-                        break;
-                    case UrgTouchState.TouchPress:
-                        var pos = _stepList[i].transform.position;
-                        var getPos = (Vector2)Managers.Game.FloorCamera.ViewportToWorldPoint(allTouch[i].viewPortPos);
-                        _stepList[i].transform.position = new Vector3(getPos.x, getPos.y, pos.z);   
-                        break;
-                    case UrgTouchState.TouchPressUp:
-                        break;
-                    case UrgTouchState.TouchClicked:
-                        break;
-                }
-            }
-        }
-        else
-        {
-            for (int i = 0; i < _stepList.Count; i++)
-            {
-                Managers.Resource.Destroy(_stepList[i]);
-                _stepList.RemoveAt(i);
-            }
-        }
-    }
-    #endregion
-    
 }
