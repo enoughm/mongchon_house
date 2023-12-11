@@ -2,12 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 public class UrgSensingCustom : MonoBehaviour
 {
     public Action<List<ConvertedSensedObject>> OnReadMDAction;
-    
+
+    [Header("Debug")]
+    public bool useSensedInvoke = false;
+    public int minAngleIndex = 0;
+    public int maxAngleIndex = 0;
+    public float distance = 0;
+
+
     [Header("sensing params (meter)")]
     public Vector2 sensingAreaSize = new Vector2(1, 1);
     public Vector2 sensingAreaOffset = new Vector2(1, 1);
@@ -108,30 +114,13 @@ public class UrgSensingCustom : MonoBehaviour
         int xFlipValue = xFlip ? -1 : 1;
         _sensingAreaRect = new Rect((_sensingArea.center.x - _sensingArea.extents.x) * xFlipValue, (_sensingArea.center.z - _sensingArea.extents.z) * zFlipValue, _sensingArea.size.x  * xFlipValue, _sensingArea.size.z * zFlipValue);
         _sensingAreaScreenRect = new Rect((_sensingScreenArea.center.x - _sensingScreenArea.extents.x) * xFlipValue, (_sensingScreenArea.center.z - _sensingScreenArea.extents.z) * zFlipValue, _sensingScreenArea.size.x  * xFlipValue, _sensingScreenArea.size.z * zFlipValue);
-      
-        //DrawMesh();
     }
 
-    private void OnDrawGizmosSelected()
+    private void FixedUpdate()
     {
-        Gizmos.matrix = transform.localToWorldMatrix;
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(_sensingArea.center, _sensingArea.size);
-        
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireCube(_sensingScreenArea.center, _sensingScreenArea.size);
-        
-        Gizmos.color = Color.green;
-        if (lockObj != null)
-            lock (lockObj)
-                for (var i = 0; i < sensedObjsInArea.Count; i++)
-                {
-                    var so = sensedObjsInArea[i];
-                    Gizmos.DrawLine(so.p0, so.center);
-                    Gizmos.DrawLine(so.center, so.p1);
-                }
+        DebugUpdateOnReadMD();
     }
-
+    
     private void OnDestroy()
     {
         urg.onReadMD -= OnReadMD;
@@ -139,28 +128,32 @@ public class UrgSensingCustom : MonoBehaviour
         if (verticesBuffer != null)
             verticesBuffer.Release();
     }
-
-    // void DrawMesh()
-    // {
-    //     lock (lockObj)
-    //     {
-    //         verticesData.Clear();
-    //         for (var i = 0; i < sensedObjs.Count; i++)
-    //             verticesData.AddRange(sensedObjs[i].vertices);
-    //         verticesBuffer.SetData(verticesData);
-    //         mat.SetInt("_VCount", sensedObjMesh.vertexCount);
-    //         mat.SetBuffer("_VBuffer", verticesBuffer);
-    //         var matrices = Enumerable.Repeat(transform.localToWorldMatrix, sensedObjs.Count).ToList();
-    //         Graphics.DrawMeshInstanced(sensedObjMesh, 0, mat, matrices);
-    //     }
-    //
-    // }
-
+    
     void GetPointFromDistance(int step, float distance, ref Vector3 pos)
     {
         var angle = step * urgControl.angleDelta - urgControl.angleOffset + 90f;
         pos.x = Mathf.Cos(angle * Mathf.Deg2Rad) * distance + xOffsetFromDetectPos;
         pos.z = Mathf.Sin(angle * Mathf.Deg2Rad) * distance + yOffsetFromDetectPos;
+    }
+
+    void DebugUpdateOnReadMD()
+    {
+        if (!useSensedInvoke)
+            return;
+        
+        List<long> distances = new List<long>();
+        for (int i = 0; i < urgControl.endStep; i++)
+        {
+            if (i > minAngleIndex && i < maxAngleIndex)
+            {
+                distances.Add((long)distance);
+            }
+            else
+            {
+                distances.Add(0);
+            }
+        }
+        OnReadMD(distances);
     }
     
     void OnReadMD(List<long> distances)

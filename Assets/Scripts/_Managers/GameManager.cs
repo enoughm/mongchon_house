@@ -55,6 +55,11 @@ public class GameManager : MonoBehaviour
         Managers.Game.ToInitialize();
     }
 
+    private void Update()
+    {
+
+    }
+
     [Button]
     public void ToInitialize()
     {

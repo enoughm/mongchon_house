@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AYellowpaper.SerializedCollections;
-using UniRx;
 using UnityEngine;
 
 public enum UrgTouchState
@@ -65,7 +64,6 @@ public class UrgTouchDetector : MonoBehaviour
     [SerializeField] private bool checkMouseViewPortPos;
     [SerializeField] private SerializedDictionary<string, AreaDetector> detectors;
 
-    private SerializedDictionary<string, Rect> _registeredObserver = new SerializedDictionary<string, Rect>();
     private List<RealTouchData> _allScreenTouchList = new List<RealTouchData>();
     
     //grid data 관련 
@@ -287,14 +285,22 @@ public class UrgTouchDetector : MonoBehaviour
     
     private void UpdateRect()
     {
-        foreach (var item in _registeredObserver)
+        foreach (var item in detectors)
         {
             //Debug.Log($"data.gridViewPortPos: {item.Value}");
             var list = UrgGridItemsParsedToList.Where(data =>
             {
-                bool contains = item.Value.Contains(data.gridViewPortPos);
-                //if(contains)
-                //Debug.Log($"data.gridViewPortPos: {data.gridViewPortPos}");
+                
+                var rectTransform = item.Value.RectTr;
+            
+                // Viewport Rect 값을 계산
+                Rect viewportRect = new Rect(
+                    rectTransform.anchoredPosition.x / ScreenWidth,
+                    rectTransform.anchoredPosition.y / ScreenHeight,
+                    rectTransform.sizeDelta.x / ScreenWidth,
+                    rectTransform.sizeDelta.y / ScreenHeight
+                );
+                bool contains = viewportRect.Contains(data.gridViewPortPos);
                 return contains;
             }).ToList();
             var total = list.Sum(data => data.sensedDataCountAverage);
@@ -343,23 +349,11 @@ public class UrgTouchDetector : MonoBehaviour
      {
          foreach (var item in detectors)
          {
-             var rectTransform = item.Value.RectTr;
-            
-             // Viewport Rect 값을 계산
-             Rect viewportRect = new Rect(
-                 rectTransform.anchoredPosition.x / ScreenWidth,
-                 rectTransform.anchoredPosition.y / ScreenHeight,
-                 rectTransform.sizeDelta.x / ScreenWidth,
-                 rectTransform.sizeDelta.y / ScreenHeight
-             );
-             // Viewport Rect 값을 사용
-             //Debug.Log("Viewport Rect: " + viewportRect);
-             _registeredObserver.Add(item.Key, viewportRect);
              item.Value.SetData(item.Key, this);
          }
      }
 
-    private void DataLoad()
+     private void DataLoad()
     {
         HokuyoIP = PlayerPrefs.GetString($"{_targetDisplay}_hokuyoIP", HokuyoIP);
         urgSensing.sensingAreaSize.x = PlayerPrefs.GetFloat($"{_targetDisplay}_screenAreaSizeX", urgSensing.sensingAreaSize.x);

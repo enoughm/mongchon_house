@@ -5,6 +5,8 @@ using UnityEngine;
 public class MainScene : BaseScene
 {
 
+    [SerializeField] private GameObject strechToFillUI;
+    
     protected override void Init()
     {
         base.Init();
@@ -18,7 +20,10 @@ public class MainScene : BaseScene
 
     private void Update()
     {
-
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            strechToFillUI.SetActive(!strechToFillUI.activeSelf);
+        }
     }
 
     public override void Clear()

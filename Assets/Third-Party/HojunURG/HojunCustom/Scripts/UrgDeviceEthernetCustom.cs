@@ -17,6 +17,13 @@ using SCIP_library;
 
 public class UrgDeviceEthernetCustom : UrgDevice
 {
+	[Header("Debug")]
+	public bool useSensedInvoke = false;
+	public int minAngleIndex = 0;
+	public int maxAngleIndex = 0;
+	public float distance = 0;
+
+	
 //	private Thread listenThread;
 	private Thread clientThread;
 	TcpClient _tcpClient;
@@ -56,6 +63,28 @@ public class UrgDeviceEthernetCustom : UrgDevice
 			_readThread.Abort();
 		
 		StartCoroutine(StartTryConnectLoop(_connectTryInterval));
+    }
+
+    private void FixedUpdate()
+    {
+	    if (!useSensedInvoke)
+		    return;
+        
+	    List<long> distances = new List<long>();
+	    for (int i = 0; i < 1081; i++)
+	    {
+		    if (i > minAngleIndex && i < maxAngleIndex)
+		    {
+			    distances.Add((long)distance);
+		    }
+		    else
+		    {
+			    distances.Add(0);
+		    }
+	    }
+
+	    this.distances = distances;
+	    onReadME.Invoke(distances, strengths);
     }
 
     private void ListenForClients()

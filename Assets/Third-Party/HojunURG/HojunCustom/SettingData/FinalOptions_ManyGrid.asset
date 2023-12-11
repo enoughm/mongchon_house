@@ -19,13 +19,13 @@ MonoBehaviour:
   gridAverageMaxCollectCount: 3
   touchCheckSpeed: 1
   touchCheckInGridArea: 0
-  touchDownCheckDuration: 0.1
-  touchMergeDistanceX: 0.05
-  touchMergeDistanceY: 0.05
+  touchDownCheckDuration: 0.05
+  touchMergeDistanceX: 0.02
+  touchMergeDistanceY: 0.02
   touchMergeDistanceXForMerge: 0.05
   touchMergeDistanceYForMerge: 0.05
   touchClickableDistance: 0.1
   touchCheckingDuration: 0.1
   touchInvokeDuration: 0.1
-  ignoreScreenPaddingXRatio: 0.05
-  ignoreScreenPaddingYRatio: 0.05
+  ignoreScreenPaddingXRatio: 0
+  ignoreScreenPaddingYRatio: 0

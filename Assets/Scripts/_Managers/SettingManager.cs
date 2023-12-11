@@ -24,6 +24,9 @@ public class SettingManager
     void Setting(Define.SettingType type)
     {
         DebugSetting(type);
+        Application.runInBackground = true;
+        if(!Application.isEditor)
+            WindowHelper.MakeTopMost();
     }
 
     void DebugSetting(Define.SettingType type)
@@ -31,12 +34,10 @@ public class SettingManager
         switch (type)
         {
             case Define.SettingType.Dev:
-                SRDebug.Instance.IsTriggerEnabled = true;
                 Application.logMessageReceived -= LogHandler;
                 Application.logMessageReceived += LogHandler;
                 break;
             case Define.SettingType.Real:
-                SRDebug.Instance.IsTriggerEnabled = false;
                 Application.logMessageReceived -= LogHandler;
                 break;
         }

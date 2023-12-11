@@ -9,6 +9,7 @@ TagManager:
   - FloorUrgTouchDetector
   - WallUrgTouchDetector
   - WallCam
+  - UrgTouchDetector
   layers:
   - Default
   - TransparentFX
@@ -38,7 +39,7 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - Children
   - Random
   - Bug
   - Seat
