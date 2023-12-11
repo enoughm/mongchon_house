@@ -1,4 +1,5 @@
 using System;
+using MelenitasDev.SoundsGood;
 using Spine.Unity;
 using Spine.Unity.Examples;
 using SWS;
@@ -125,7 +126,7 @@ public class Bug : MonoBehaviour
     public void SetState(State state)
     {
         _curState = state;
-        Debug.Log($"SetState: [{_prevState}] to [{_curState}]");
+        //Debug.Log($"SetState: [{_prevState}] to [{_curState}]");
     }
     
     /// <summary>
@@ -159,7 +160,8 @@ public class Bug : MonoBehaviour
     private void EnterState_OutSeat()
     {
         SplineMoveOn();
-        
+        Managers.Sound.PlaySfx(SFX.Seat);
+
         _splineMove.pathContainer = _curSeatController.GetRandomExitPath();
         _splineMove.speed = outSeatSpeed;
         _splineMove.loopType = splineMove.LoopType.none;
@@ -267,6 +269,7 @@ public class Bug : MonoBehaviour
         _navMeshAgent.ResetPath();
         _navMeshAgent.speed = 0;
         var obj = Managers.Resource.Instantiate("Effect/Dust");
+        Managers.Sound.PlaySfx(SFX.Step);
         obj.transform.position = transform.position;
         obj.transform.rotation = Quaternion.identity;
         OnDie?.Invoke();

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using MelenitasDev.SoundsGood;
 using Spine.Unity;
 using Spine.Unity.Examples;
 using SRF;
@@ -62,7 +63,6 @@ public class SeatController : MonoBehaviour
             bugShowingTime += Time.deltaTime;
             if (bugShowingTime > bugShowingInterval)
             {
-                Debug.Log("Show Bugs");
                 bugShowingTime = 0;
                 PlayAnim();
             }

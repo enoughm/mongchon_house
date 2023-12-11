@@ -40,6 +40,9 @@ MonoBehaviour:
     - NavMeshPlus
     - SingularityGroup.HotReload.Runtime
     - SingularityGroup.HotReload.Runtime.Public
+    - SoundsGood.Application
+    - SoundsGood.Domain
+    - SoundsGood.Editor
     - spine-csharp
     - spine-unity
     - spine-unity-examples
