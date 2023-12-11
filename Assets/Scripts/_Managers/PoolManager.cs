@@ -77,6 +77,9 @@ public class PoolManager
 
     public void CreatePool(GameObject original, int count = 1)
     {
+        if(_pool.ContainsKey(original.name) == true)
+            return;
+        
         Pool pool = new Pool();
         pool.Init(original, count);
         pool.Root.parent = _root;
@@ -96,10 +99,10 @@ public class PoolManager
         _pool[name].Push(poolable);
     }
 
-    public Poolable Pop(GameObject original, Transform parent = null)
+    public Poolable Pop(GameObject original, Transform parent = null, int defaultPoolCount = 1)
     {
         if (_pool.ContainsKey(original.name) == false)
-            CreatePool(original);
+            CreatePool(original, defaultPoolCount);
 
         return _pool[original.name].Pop(parent);
     }

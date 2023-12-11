@@ -48,6 +48,7 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         _wallUrgTouchDetector = GameObject.FindGameObjectWithTag("WallUrgTouchDetector").GetComponent<UrgTouchDetector>();
+        _wallUrgTouchDetector.HokuyoAction += OnFloorAction;
     }
 
     private void Start()
@@ -58,6 +59,16 @@ public class GameManager : MonoBehaviour
     private void Update()
     {
 
+    }
+    
+    
+    private void OnFloorAction(UrgTouchState arg1, Vector2 arg2)
+    {
+        if (arg1 == UrgTouchState.TouchDown)
+        {
+            var obj = Managers.Resource.Instantiate("Particle/벽터치", this.transform, 20);
+            obj.transform.position = FloorCamera.ViewportToWorldPoint(arg2);
+        }
     }
 
     [Button]

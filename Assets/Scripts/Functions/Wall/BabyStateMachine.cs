@@ -110,6 +110,26 @@ public class BabyStateMachine : AbstractFiniteStateMachine
         dir.Normalize();
         transform.position += dir * speed * Time.deltaTime;
     }
+    
+    private void OnMouseEvent(Define.MouseEvent obj)
+    {
+        if (obj != Define.MouseEvent.Click)
+            return;
+			
+        //raycast가 chractercontroller 입력 받았는지 확인
+        Ray ray = Managers.Game.WallCamera.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        int layerMask = 1 << LayerMask.NameToLayer("Baby");
+        if (Physics.Raycast(ray, out hit, 100f, layerMask))
+        {
+            if (hit.transform.gameObject == gameObject)
+            {
+                //anagers.Sound.PlaySfx(SFX.CharacterClick);
+                //StateChange();
+            }
+        }
+    }
+    
 
     public class IdleState : AbstractState
     {
