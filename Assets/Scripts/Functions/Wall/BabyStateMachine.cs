@@ -1,6 +1,7 @@
 using UnityEngine;
 using KevinCastejon.FiniteStateMachine;
 using Sirenix.OdinInspector;
+using UnityEngine.Serialization;
 
 public class BabyStateMachine : AbstractFiniteStateMachine
 {
@@ -11,11 +12,15 @@ public class BabyStateMachine : AbstractFiniteStateMachine
     [SerializeField] private LightManager lightManager;
     [SerializeField] private BabyAnimStateMachine animStateMachine;
     [SerializeField] private CandleController leftCandle;
+    [SerializeField] private Transform leftCandleFirePos;
     [SerializeField] private CandleController rightCandle;
+    [FormerlySerializedAs("rightCandleFirePos")] [SerializeField] private Transform rightCandleFireTr;
     [SerializeField] private Transform initTr;
-    [SerializeField] private Transform moveTargetTr;
     [SerializeField] private Transform leftMaxTr;
     [SerializeField] private Transform rightMaxTr;
+    
+    [SerializeField] private Transform moveTargetTr;
+
 
     
     public enum State
@@ -49,7 +54,7 @@ public class BabyStateMachine : AbstractFiniteStateMachine
     [Button]
     public void TurnOnLight()
     {
-        TransitionToState(State.LIGHTONLEFT);
+        TransitionToState(State.LIGHTONRIGHT);
     }
     
     [Button]
@@ -58,6 +63,15 @@ public class BabyStateMachine : AbstractFiniteStateMachine
         TransitionToState(State.TO_INIT);
     }
 
+    private void SetSpeed(bool run)
+    {
+        if(run)
+            animStateMachine.ToRun();
+        else
+            animStateMachine.ToWalk();
+        
+        speed = run ? 6 : 3;
+    }
 
     private void SetMoveTarget(Transform transform)
     {
@@ -95,7 +109,7 @@ public class BabyStateMachine : AbstractFiniteStateMachine
         if (moveTargetTr == null)
             return;
 
-        if (Vector3.Distance(transform.position, moveTargetTr.position) < stopDistance)
+        if (Vector3.Distance(transform.position , moveTargetTr.position) < stopDistance )
         {
             reached = true;
             return;
@@ -165,6 +179,7 @@ public class BabyStateMachine : AbstractFiniteStateMachine
         
         public override void OnUpdate()
         {
+            
         }
         
         public override void OnExit()
@@ -175,49 +190,23 @@ public class BabyStateMachine : AbstractFiniteStateMachine
     public class LightOnLeftState : AbstractState
     {
         private BabyStateMachine _machine;
-        private bool done;
+        private bool done1;
         public override void OnEnter()
         {
             _machine = GetStateMachine<BabyStateMachine>();
-            _machine.animStateMachine.ToWalk();
             _machine.SetMoveTarget(_machine.leftCandle.transform);
-            done = false;
+            _machine.SetSpeed(true);
+            _machine.stopDistance = 1.35f;
+            done1 = false;
         }
         public override void OnUpdate()
         {
-            if (_machine.reached && !done)
+            if (_machine.reached && !done1)
             {
-                done = true;
+                done1 = true;
                 _machine.animStateMachine.ToLightOn();
+                Managers.Game.SendPacketLightOnLeft();
                 _machine.leftCandle.LightOn(1f,() =>
-                {
-                    TransitionToState(State.LIGHTONRIGHT);
-                });
-            }
-        }
-        public override void OnExit()
-        {
-        }
-    }
-    
-    public class LightOnRightState : AbstractState
-    {
-        private BabyStateMachine _machine;
-        private bool done;
-        public override void OnEnter()
-        {
-            _machine = GetStateMachine<BabyStateMachine>();
-            _machine.animStateMachine.ToWalk();
-            _machine.SetMoveTarget(_machine.rightCandle.transform);
-            done = false;
-        }
-        public override void OnUpdate()
-        {
-            if (_machine.reached && !done)
-            {
-                done = true;
-                _machine.animStateMachine.ToLightOn();
-                _machine.rightCandle.LightOn(1f, () =>
                 {
                     TransitionToState(State.FollowRun);
                     _machine.lightManager.ToLight(3);
@@ -229,18 +218,64 @@ public class BabyStateMachine : AbstractFiniteStateMachine
         }
     }
     
-    public class FollowRunState : AbstractState
+    public class LightOnRightState : AbstractState
     {
         private BabyStateMachine _machine;
+        private bool done1;
+        private bool done2;
         public override void OnEnter()
         {
             _machine = GetStateMachine<BabyStateMachine>();
-            _machine.animStateMachine.ToIdle();
+            _machine.SetMoveTarget(_machine.rightCandleFireTr);
+            _machine.SetSpeed(false);
+            _machine.stopDistance = 0.05f;
+            done1 = false;
+        }
+        public override void OnUpdate()
+        {
+            if (_machine.reached && !done1)
+            {
+                done1 = true;
+                _machine.SetSpeed(true);
+                _machine.SetMoveTarget(_machine.rightCandle.transform);
+                _machine.stopDistance = 1.35f;
+            }
+            else if (_machine.reached && !done2)
+            {
+                done2 = true;
+                _machine.animStateMachine.ToLightOn();
+                Managers.Game.SendPacketLightOnRight();
+                _machine.rightCandle.LightOn(1f, () =>
+                {
+                    TransitionToState(State.LIGHTONLEFT);
+                });
+            }
+        }
+        public override void OnExit()
+        {
+        }
+    }
+    
+    public class FollowRunState : AbstractState
+    {
+        private BabyStateMachine _machine;
+        private bool done;
+        public override void OnEnter()
+        {
+            _machine = GetStateMachine<BabyStateMachine>();
+            _machine.SetSpeed(false);
+            _machine.SetMoveTarget(_machine.initTr);
+            _machine.stopDistance = 0.05f;
         }
         
         public override void OnUpdate()
         {
             //check player of front
+            if (_machine.reached && !done)
+            {
+                done = true;
+                TransitionToState(State.IDLE);
+            }
         }
         
         public override void OnExit()
@@ -255,7 +290,7 @@ public class BabyStateMachine : AbstractFiniteStateMachine
         public override void OnEnter()
         {
             _machine = GetStateMachine<BabyStateMachine>();
-            _machine.animStateMachine.ToWalk();
+            _machine.SetSpeed(false);
             _machine.SetMoveTarget(_machine.initTr);
             _machine.lightManager.ToDark(3);
             done = false;

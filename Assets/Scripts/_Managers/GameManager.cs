@@ -6,6 +6,16 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] private string gameState;
+    public TCPServerManager Server
+    {
+        get
+        {
+            if(_server == null)
+                _server = FindObjectOfType<TCPServerManager>();
+            return _server;
+        }
+    }
     public Camera FloorCamera
     {
         get
@@ -34,6 +44,7 @@ public class GameManager : MonoBehaviour
 
     UrgTouchDetector _floorUrgTouchDetector;
     UrgTouchDetector _wallUrgTouchDetector;
+    private TCPServerManager _server;
 
     private bool _isSomeone = false;
     private float _floorInvokeTime = 0;
@@ -50,6 +61,18 @@ public class GameManager : MonoBehaviour
         _wallUrgTouchDetector = GameObject.FindGameObjectWithTag("WallUrgTouchDetector").GetComponent<UrgTouchDetector>();
         _wallUrgTouchDetector.HokuyoAction += OnFloorAction;
     }
+    
+    private void OnEnable()
+    {
+        WallUrgTouchDetector.RectObserveAction += OnWallUrgTouchDetectorRectObserveAction;
+        ServerPacketHandler.onPacketSimple += OnPacketSimple;
+    }
+
+    private void OnDisable()
+    {
+        WallUrgTouchDetector.RectObserveAction -= OnWallUrgTouchDetectorRectObserveAction;
+        ServerPacketHandler.onPacketSimple -= OnPacketSimple;
+    }
 
     private void Start()
     {
@@ -60,17 +83,25 @@ public class GameManager : MonoBehaviour
     {
 
     }
-    
-    
-    private void OnFloorAction(UrgTouchState arg1, Vector2 arg2)
-    {
-        if (arg1 == UrgTouchState.TouchDown)
-        {
-            var obj = Managers.Resource.Instantiate("Particle/벽터치", this.transform, 20);
-            obj.transform.position = FloorCamera.ViewportToWorldPoint(arg2);
-        }
-    }
 
+    public void SendPacketLightOnLeft()
+    {
+        TCPServerManager.Room.Broadcast(new PacketSimple()
+        {
+            packetKey = "LightOnLeft",
+            stringData = $"on",
+        }.Write());
+    }
+    
+    public void SendPacketLightOnRight()
+    {
+        TCPServerManager.Room.Broadcast(new PacketSimple()
+        {
+            packetKey = "LightOnRight",
+            stringData = $"on",
+        }.Write());
+    }
+    
     [Button]
     public void ToInitialize()
     {
@@ -82,17 +113,40 @@ public class GameManager : MonoBehaviour
     {
         FindObjectOfType<BabyStateMachine>().TurnOnLight();
     }
-
-    private void OnEnable()
+   
+    
+    private void OnPacketSimple(PacketSimple obj)
     {
-        WallUrgTouchDetector.RectObserveAction += OnWallUrgTouchDetectorRectObserveAction;
+        Debug.Log($"[Server] OnPacketSample : {obj.stringData}");
+        switch (obj.packetKey)
+        {
+            case "GameState":
+                if(gameState == obj.stringData)
+                    return;
+                
+                if (obj.stringData == "NoOne")
+                {
+                    ToInitialize();
+                }
+                else
+                {
+                    Someone();
+                }
+                
+                gameState = obj.stringData;
+                break;
+        }
     }
-
-    private void OnDisable()
+    
+    private void OnFloorAction(UrgTouchState arg1, Vector2 arg2)
     {
-        WallUrgTouchDetector.RectObserveAction -= OnWallUrgTouchDetectorRectObserveAction;
+        if (arg1 == UrgTouchState.TouchDown)
+        {
+            //var obj = Managers.Resource.Instantiate("Particle/벽터치", this.transform, 20);
+            //obj.transform.position = FloorCamera.ViewportToWorldPoint(arg2);
+        }
     }
-
+    
     private void OnWallUrgTouchDetectorRectObserveAction(string arg1, UrgGridObserverData arg2)
     {
         //left
