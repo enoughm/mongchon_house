@@ -109,6 +109,9 @@ public class UrgSensingCustom : MonoBehaviour
         _sensingAreaRect = new Rect((_sensingArea.center.x - _sensingArea.extents.x) * xFlipValue, (_sensingArea.center.z - _sensingArea.extents.z) * zFlipValue, _sensingArea.size.x  * xFlipValue, _sensingArea.size.z * zFlipValue);
         _sensingAreaScreenRect = new Rect((_sensingScreenArea.center.x - _sensingScreenArea.extents.x) * xFlipValue, (_sensingScreenArea.center.z - _sensingScreenArea.extents.z) * zFlipValue, _sensingScreenArea.size.x  * xFlipValue, _sensingScreenArea.size.z * zFlipValue);
       
+        //add angle
+        
+        
         //DrawMesh();
     }
 

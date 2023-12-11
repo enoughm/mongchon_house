@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5fd681c76e44d749a42c398ec886f9f, type: 3}
   m_Name: FinalOptions
   m_EditorClassIdentifier: 
-  touchGrid: {x: 30, y: 15}
+  touchGrid: {x: 30, y: 60}
   gridAverageAcceptThreshold: 1.5
   gridAreaCountCheckThreshold: 2
   competitionApproveThreshold: 0.65

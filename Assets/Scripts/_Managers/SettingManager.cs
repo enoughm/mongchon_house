@@ -24,6 +24,9 @@ public class SettingManager
     void Setting(Define.SettingType type)
     {
         DebugSetting(type);
+        Application.runInBackground = true;
+        if(!Application.isEditor)
+            WindowHelper.MakeTopMost();
     }
 
     void DebugSetting(Define.SettingType type)
