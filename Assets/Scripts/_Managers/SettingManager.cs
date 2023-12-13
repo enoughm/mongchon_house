@@ -27,6 +27,7 @@ public class SettingManager
         Application.runInBackground = true;
         if(!Application.isEditor)
             WindowHelper.MakeTopMost();
+        Cursor.visible = false;
     }
 
     void DebugSetting(Define.SettingType type)
