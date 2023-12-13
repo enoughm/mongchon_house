@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class TCPServerManager : MonoBehaviour
 {
+
+    [SerializeField] private bool isLocalhost = false;
     public string clientIP = "127.0.0.1";
     private const int Port = 7777;
     private Listener _listener = new Listener();
@@ -29,9 +31,16 @@ public class TCPServerManager : MonoBehaviour
         // string host = Dns.GetHostName();
         // IPHostEntry ipHost = Dns.GetHostEntry(host);
         // IPAddress ipAddr = ipHost.AddressList[0];
-        IPAddress ipAddr = IPAddress.Parse(clientIP);
+        if (!isLocalhost)
+        {
+            IPAddress ipAddr = IPAddress.Parse(clientIP);
+            OpenServer(ipAddr, Port);
+        }
+        else
+        {
+            OpenServer(IPAddress.Loopback, Port);
+        }
         //Server 실행
-        OpenServer(ipAddr, Port);
     }
 
     public void OpenServer(IPAddress ipAddress, int port)

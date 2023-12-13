@@ -14,16 +14,17 @@ public class Step : MonoBehaviour
 
     private void OnEnable()
     {
-        StopAllCoroutines();
-        StartCoroutine(CoDelayObstacle());
+        _obstacle.enabled = true;
+        //StopAllCoroutines();
+        //StartCoroutine(CoDelayObstacle());
     }
 
-    IEnumerator CoDelayObstacle()
-    {
-        _obstacle.enabled = false;
-        yield return new WaitForSeconds(0.5f);
-        _obstacle.enabled = true;
-    }
+    // IEnumerator CoDelayObstacle()
+    // {
+    //     _obstacle.enabled = false;
+    //     yield return new WaitForSeconds(0.5f);
+    //     _obstacle.enabled = true;
+    // }
     
     
 }

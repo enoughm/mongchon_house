@@ -230,6 +230,7 @@ public class BabyStateMachine : AbstractFiniteStateMachine
             _machine.SetSpeed(false);
             _machine.stopDistance = 0.05f;
             done1 = false;
+            done2 = false;
         }
         public override void OnUpdate()
         {
@@ -266,6 +267,7 @@ public class BabyStateMachine : AbstractFiniteStateMachine
             _machine.SetSpeed(false);
             _machine.SetMoveTarget(_machine.initTr);
             _machine.stopDistance = 0.05f;
+            done = false;
         }
         
         public override void OnUpdate()
