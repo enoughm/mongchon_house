@@ -268,7 +268,7 @@ public class Bug : MonoBehaviour
         SplineMoveOff();
         _navMeshAgent.ResetPath();
         _navMeshAgent.speed = 0;
-        var obj = Managers.Resource.Instantiate("Effect/Dust");
+        var obj = Managers.Resource.Instantiate("Particle/Dust");
         Managers.Sound.PlaySfx(SFX.Step);
         obj.transform.position = transform.position;
         obj.transform.rotation = Quaternion.identity;

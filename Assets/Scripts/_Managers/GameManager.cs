@@ -33,9 +33,8 @@ public class GameManager : MonoBehaviour
     public List<GameObject> StepList => _stepList;
 
     
-    
-    public float floorEmptyTimeMax = 10;
-    public float floorInvokeTimeMax = 3;
+    public float floorEmptyTimeMax = 5;
+    public float floorInvokeTimeMax = 0.5f;
     
     
     private bool _isSomeone = false;
@@ -70,11 +69,13 @@ public class GameManager : MonoBehaviour
     private void OnEnable()
     {
         ClientPacketHandler.OnPacketSimple += OnPacketSimple;
+        _floorUrgTouchDetector.HokuyoAction += OnFloorAction;
     }
     
     private void OnDisable()
     {
         ClientPacketHandler.OnPacketSimple -= OnPacketSimple;
+        _floorUrgTouchDetector.HokuyoAction -= OnFloorAction;
     }
 
 
@@ -219,6 +220,16 @@ public class GameManager : MonoBehaviour
 
 
     #region FloorUrgDetector
+    
+    private void OnFloorAction(UrgTouchState arg1, Vector2 arg2)
+    {
+        if (arg1 == UrgTouchState.TouchDown)
+        {
+            var obj = Managers.Resource.Instantiate("Particle/바닥밟기", this.transform, 20);
+            obj.transform.position = FloorCamera.ViewportToWorldPoint(arg2);
+        }
+    }
+    
     private void FloorUpdate()
     {
         if (FloorTouchCount > 0)

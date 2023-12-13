@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class TCPClientManager : MonoBehaviour
 {
+    [SerializeField] private bool isLocalhost = false;
     [SerializeField] private string clientIP = "127.0.0.1"; 
     private const int Port = 7777;
     private ServerSession _session = new ServerSession();
@@ -27,10 +28,15 @@ public class TCPClientManager : MonoBehaviour
         // string host = Dns.GetHostName();
         // IPHostEntry ipHost = Dns.GetHostEntry(host);
         // IPAddress ipAddr = ipHost.AddressList[0];
-        IPAddress ipAddr = IPAddress.Parse(clientIP);
-
-        //Server 실행
-        StartConnectionLoop(ipAddr, Port);
+        if (!isLocalhost)
+        {
+            IPAddress ipAddr = IPAddress.Parse(clientIP);
+            StartConnectionLoop(ipAddr, Port);
+        }
+        else
+        {
+            StartConnectionLoop(IPAddress.Loopback, Port);
+        }
     }
     
     public void StartConnectionLoop(IPAddress address, int port = 7777)

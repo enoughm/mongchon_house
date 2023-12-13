@@ -32,6 +32,9 @@ MonoBehaviour:
     assemblyNames:
     - AiToolbox
     - AiToolbox.Samples
+    - AllIn1VfxAssmebly
+    - AllIn1VfxDemoScriptAssemblies
+    - AllIn1VfxTexDemoAssembly
     - Assembly-CSharp
     - Assembly-CSharp-firstpass
     - AYellowpaper.SerializedCollections
