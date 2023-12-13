@@ -1,6 +1,8 @@
+using DG.Tweening;
 using Spine.Unity;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Serialization;
 
 public class Chaser : MonoBehaviour
 {
@@ -38,15 +40,16 @@ public class Chaser : MonoBehaviour
     public float avoidingAcceleration = 10;
     public float avoidingAnimTimeScale = 2.5f;
     
-    public bool chasingSuccess = false;
+    [FormerlySerializedAs("chasingSuccess")] public bool chasingCacluationSuccess = false;
     public float chasingSpeed = 7f;
     public float chasingAcceleration = 3;
     public float chasingTimeScale = 1.75f;
+    public float chasingStopDistance = 1.5f;
 
     public float waitingSpeed = 0.5f;
     public float waitingRange = 0.5f;
     public float waitingDuration = 2f;
-    public float waitingIdleMoveDuration = 1.5f;
+    public float waitingIdleMoveDuration = 1f;
     public float waitingAcceleration = 3;
     public float waitingTimeScale = 0.7f;
 
@@ -223,6 +226,8 @@ public class Chaser : MonoBehaviour
     #endregion
 
     #region State_Waiting
+
+    public Transform closeStepInWaiting;
     private void Enter_Waiting()
     {
         _navMeshAgent.ResetPath();
@@ -234,8 +239,10 @@ public class Chaser : MonoBehaviour
         
         //FindCloseTarget;
         var close = FindCloseStep();
-        if (!_navMeshAgent.hasPath && close != null)
+        closeStepInWaiting = close;
+        if (closeStepInWaiting != null)
         {
+            _navMeshAgent.ResetPath();
             _navMeshAgent.SetDestination(close.position);
         }
     }
@@ -245,25 +252,46 @@ public class Chaser : MonoBehaviour
         _waitingTime += Time.deltaTime;
 
 
-        var close = FindCloseStep();
+        closeStepInWaiting = FindCloseStep();
+        
+        
+        // if(Vector2.Distance(this.transform.position, closeStepInWaiting.transform.position) < chasingStopDistance)
+        // {
+        //     if(_navMeshAgent.remainingDistance <= _navMeshAgent.stoppingDistance) 
+        //     {
+        //         _waitingIdleMoveTime += Time.deltaTime;
+        //         if (_waitingIdleMoveTime > waitingIdleMoveDuration)
+        //         {
+        //             _waitingIdleMoveTime = 0;
+        //             Transform tr = closeStepInWaiting == null ? this.transform : closeStepInWaiting;
+        //             Vector3 point;
+        //             if (RandomPoint(tr.position, waitingRange, out point))
+        //             {
+        //                 Debug.DrawRay(point, Vector3.up, Color.blue, 1.0f);
+        //                 _navMeshAgent.SetDestination(point);
+        //             }
+        //         }
+        //     }
+        //     
+        //     return;
+        // }
+        // if(_navMeshAgent.remainingDistance <= _navMeshAgent.stoppingDistance) 
+        // {
+        //     _waitingIdleMoveTime += Time.deltaTime;
+        //     if (_waitingIdleMoveTime > waitingIdleMoveDuration)
+        //     {
+        //         _waitingIdleMoveTime = 0;
+        //         Transform tr = close == null ? this.transform : close;
+        //         Vector3 point;
+        //         if (RandomPoint(tr.position, waitingRange, out point))
+        //         {
+        //             Debug.DrawRay(point, Vector3.up, Color.blue, 1.0f);
+        //             _navMeshAgent.SetDestination(point);
+        //         }
+        //     }
+        // }
 
-
-
-        if(_navMeshAgent.remainingDistance <= _navMeshAgent.stoppingDistance) 
-        {
-            _waitingIdleMoveTime += Time.deltaTime;
-            if (_waitingIdleMoveTime > waitingIdleMoveDuration)
-            {
-                _waitingIdleMoveTime = 0;
-                Transform tr = close == null ? this.transform : close;
-                Vector3 point;
-                if (RandomPoint(tr.position, waitingRange, out point))
-                {
-                    Debug.DrawRay(point, Vector3.up, Color.blue, 1.0f);
-                    _navMeshAgent.SetDestination(point);
-                }
-            }
-        }
+        
 
         if (isStep)
         {
@@ -274,7 +302,7 @@ public class Chaser : MonoBehaviour
 
         if(_waitingTime > waitingDuration)
         {
-            if (close == null)
+            if (closeStepInWaiting == null)
             {
                 SetState(State.RandomMove);
                 return;
@@ -290,32 +318,40 @@ public class Chaser : MonoBehaviour
 
 
     #region State_Chasing
+    Vector3 closeStepInChasing;
     private void Enter_Chasing()
     {
-        _navMeshAgent.ResetPath();
         _navMeshAgent.speed = chasingSpeed;
         _navMeshAgent.acceleration = chasingAcceleration;
         skeletonAnimation.timeScale = chasingTimeScale;
-        chasingSuccess = false;
+        chasingCacluationSuccess = false;
 
+        
         //FindCloseTarget;
         var close = FindCloseStep();
-        if (!_navMeshAgent.hasPath)
-        {
-            chasingSuccess = _navMeshAgent.SetDestination(close.position);
-        }
-    }
-
-    private void Update_Chasing()
-    {
-        if(_navMeshAgent.remainingDistance <= _navMeshAgent.stoppingDistance) 
+        if (close == null)
         {
             SetState(State.Waiting);
             return;
         }
+        
+        closeStepInChasing = close.position;
+        _navMeshAgent.ResetPath();
+        chasingCacluationSuccess = _navMeshAgent.SetDestination(closeStepInChasing);
+    }
 
-        if (!chasingSuccess)
+    private void Update_Chasing()
+    { 
+        if (!chasingCacluationSuccess)
         {
+            SetState(State.Waiting);
+            return;
+        }
+        
+        if(Vector2.Distance(this.transform.position, closeStepInChasing) < chasingStopDistance)
+        {
+            _navMeshAgent.ResetPath();
+            Debug.Log("Chasing Success");
             SetState(State.Waiting);
             return;
         }

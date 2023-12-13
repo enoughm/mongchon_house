@@ -157,31 +157,32 @@ public class SeatController : MonoBehaviour
     
     private void OnHokuyoEvent(UrgTouchState state, Vector2 arg2)
     {
-        switch (state)
+        Ray ray = Managers.Game.FloorCamera.ViewportPointToRay(arg2);
+        RaycastHit hit;
+        int layerMask = 1 << LayerMask.NameToLayer("Seat");
+        if (Physics.Raycast(ray, out hit, 100f, layerMask))
         {
-            case UrgTouchState.Empty:
-                break;
-            case UrgTouchState.TouchMoment:
-                break;
-            case UrgTouchState.TouchDown:
-                break;
-            case UrgTouchState.TouchPress:
-                Ray ray = Managers.Game.FloorCamera.ViewportPointToRay(arg2);
-                RaycastHit hit;
-                int layerMask = 1 << LayerMask.NameToLayer("Seat");
-                if (Physics.Raycast(ray, out hit, 100f, layerMask))
+            if (hit.transform.gameObject.Equals(gameObject))
+            {
+                switch (state)
                 {
-                    if (hit.transform.gameObject.Equals(gameObject))
-                    {
-                        //isStep = true;
+                    case UrgTouchState.Empty:
+                        break;
+                    case UrgTouchState.TouchMoment:
+                        break;
+                    case UrgTouchState.TouchDown:
+                        Managers.Sound.PlaySfx(SFX.SeatStep);
                         steped = true;
-                    }
+                        break;
+                    case UrgTouchState.TouchPress:
+                        break;
+                    case UrgTouchState.TouchPressUp:
+                        break;
+                    case UrgTouchState.TouchClicked:
+                        break;
                 }
-                break;
-            case UrgTouchState.TouchPressUp:
-                break;
-            case UrgTouchState.TouchClicked:
-                break;
+            }
         }
+       
     }
 }

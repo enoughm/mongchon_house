@@ -65,6 +65,24 @@ public partial class SROptions {
         }
     }
     
+    [Category("Audio")] 
+    [NumberRange(0f, 1f)]
+    [Increment(0.05f)]
+    public float StepSoundMinInterval
+    {
+        get => Managers.Save.LocalLoad<float>("StepSoundMinInterval", 0.5f);
+        set => Managers.Save.LocalSave("StepSoundMinInterval", value);
+    }
+    
+    [Category("Audio")] 
+    [NumberRange(0f, 1f)]
+    [Increment(0.05f)]
+    public float StepSound
+    {
+        get => Managers.Save.LocalLoad<float>("StepSound", 0.5f);
+        set => Managers.Save.LocalSave("StepSound", value);
+    }
+    
     [Category("Playing")]
     [NumberRange(10,5000)]
     [Increment(1f)]
@@ -73,5 +91,7 @@ public partial class SROptions {
         get => Managers.Save.LocalLoad<float>("WaitTIme", 15f);
         set => Managers.Save.LocalSave("WaitTIme", value);
     }
+    
+    
 }
 

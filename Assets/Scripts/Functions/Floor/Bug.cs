@@ -214,6 +214,7 @@ public class Bug : MonoBehaviour
         if (isStep)
         {
             Debug.Log("밟힘}");
+            Managers.Sound.PlaySfx(SFX.Step);
             SetState(State.Die);
             return;
         }
@@ -254,6 +255,7 @@ public class Bug : MonoBehaviour
         if (isStep)
         {
             Debug.Log("밟힘}");
+            Managers.Sound.PlaySfx(SFX.Step);
             SetState(State.Die);
             return;
         }
@@ -269,7 +271,6 @@ public class Bug : MonoBehaviour
         _navMeshAgent.ResetPath();
         _navMeshAgent.speed = 0;
         var obj = Managers.Resource.Instantiate("Particle/Dust");
-        Managers.Sound.PlaySfx(SFX.Step);
         obj.transform.position = transform.position;
         obj.transform.rotation = Quaternion.identity;
         OnDie?.Invoke();

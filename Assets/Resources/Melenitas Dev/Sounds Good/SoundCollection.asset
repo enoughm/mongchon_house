@@ -23,3 +23,14 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 497d9afc812461545bd267c0fb0d0b44, type: 3}
     compressionPreset: 1
     forceToMono: 0
+  - tag: SandStep
+    clips:
+    - {fileID: 8300000, guid: 78843bcf2f7dd7d4781fccfa09069ff2, type: 3}
+    compressionPreset: 1
+    forceToMono: 0
+  - tag: SeatStep
+    clips:
+    - {fileID: 8300000, guid: d5f364152f67a2f47a0a15a64b32719b, type: 3}
+    - {fileID: 8300000, guid: b17bff8d4c2b9814ebd85dba87aa2749, type: 3}
+    compressionPreset: 1
+    forceToMono: 0

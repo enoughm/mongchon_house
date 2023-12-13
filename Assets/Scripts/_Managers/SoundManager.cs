@@ -5,6 +5,9 @@ using UnityEngine;
 public class SoundManager : MonoBehaviour
 {
     private Music music;
+    private float sandStepTimer;
+    private float seatStepTimer;
+    private float stepSoundInterval = 0.6f;
     
     public void Init()
     {
@@ -38,6 +41,29 @@ public class SoundManager : MonoBehaviour
     {
         switch (sfx)
         {
+            case SFX.SeatStep:
+                if (Mathf.Abs(seatStepTimer - Time.realtimeSinceStartup) < SROptions.Current.StepSoundMinInterval)
+                    return;
+                seatStepTimer = Time.realtimeSinceStartup;
+                Sound seatStepSound = new Sound(sfx);
+                seatStepSound
+                    .SetOutput(Output.SFX)
+                    .SetVolume(AudioManager.GetLastSavedOutputVolume(Output.SFX) * SROptions.Current.StepSound)
+                    .SetRandomClip(true)
+                    .SetRandomPitch()
+                    .Play();
+                break;
+            case SFX.SandStep:
+                if (Mathf.Abs(sandStepTimer - Time.realtimeSinceStartup) < SROptions.Current.StepSoundMinInterval)
+                    return;
+                sandStepTimer = Time.realtimeSinceStartup;
+                Sound sandStepSound = new Sound(sfx);
+                sandStepSound
+                    .SetVolume(AudioManager.GetLastSavedOutputVolume(Output.SFX) * SROptions.Current.StepSound)
+                    .SetOutput(Output.SFX)
+                    .SetRandomPitch()
+                    .Play();
+                break;
             default:
                 Sound sound = new Sound(sfx);
                 sound

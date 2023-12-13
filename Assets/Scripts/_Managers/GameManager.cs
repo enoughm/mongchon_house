@@ -56,7 +56,6 @@ public class GameManager : MonoBehaviour
     private float nothingTime = 0;
     private float nothingMaxTime = 15;
     
-    
 
     
     private void Awake()
@@ -225,8 +224,18 @@ public class GameManager : MonoBehaviour
     {
         if (arg1 == UrgTouchState.TouchDown)
         {
-            var obj = Managers.Resource.Instantiate("Particle/바닥밟기", this.transform, 20);
-            obj.transform.position = FloorCamera.ViewportToWorldPoint(arg2);
+            Ray ray = Managers.Game.FloorCamera.ViewportPointToRay(arg2);
+            RaycastHit hit;
+            int layerMask = 1 << LayerMask.NameToLayer("Sand");
+            if (Physics.Raycast(ray, out hit, 100f, layerMask))
+            {
+                Managers.Sound.PlaySfx(SFX.SandStep);
+                if (_light.isEveryLightOn)
+                {
+                    var obj = Managers.Resource.Instantiate("Particle/바닥밟기", this.transform, 20);
+                    obj.transform.position = FloorCamera.ViewportToWorldPoint(arg2);
+                }
+            }
         }
     }
     

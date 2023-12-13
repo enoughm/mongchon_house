@@ -10,9 +10,12 @@ public class LightManager : MonoBehaviour
 
     public float brightGlobalIntensity = 0.6f;
     public float darkGlobalIntensity = 0.2f;
+    
+    public bool isEveryLightOn = false;
 
     public void ToDark(float duration)
     {
+        isEveryLightOn = false;
         StopAllCoroutines();
         StartCoroutine(CoToDark(duration));
     }
@@ -51,6 +54,7 @@ public class LightManager : MonoBehaviour
     
     public void ToGlobalLight(float duration)
     {
+        isEveryLightOn = true;
         StopAllCoroutines();
         StartCoroutine(CoToLight(duration));
     }

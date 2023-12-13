@@ -66,7 +66,37 @@ public class UrgDeviceEthernetCustom : UrgDevice
 		StartCoroutine(DebugUpdate());
 		StartCoroutine(StartTryConnectLoop(_connectTryInterval));
     }
-    
+
+    private void Update()
+    {
+	    if (Input.GetKeyDown(KeyCode.D))
+	    {
+		    useSensedInvoke = !useSensedInvoke;
+	    }
+	    
+	    if (useSensedInvoke)
+	    {
+		    if (Input.GetKeyDown(KeyCode.UpArrow))
+		    {
+			    minAngleIndex -= 100;
+			    maxAngleIndex -= 100;
+		    }
+		    if (Input.GetKeyDown(KeyCode.DownArrow))
+		    {
+			    minAngleIndex += 100;
+			    maxAngleIndex += 100;
+		    }
+		    if (Input.GetKeyDown(KeyCode.LeftArrow))
+		    {
+			    distance += 100;
+		    }
+		    if (Input.GetKeyDown(KeyCode.RightArrow))
+		    {
+			    distance -= 100;
+		    }
+	    }
+    }
+
     IEnumerator DebugUpdate()
     {
 	    while (true)

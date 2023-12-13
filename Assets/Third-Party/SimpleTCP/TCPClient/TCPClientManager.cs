@@ -28,6 +28,9 @@ public class TCPClientManager : MonoBehaviour
         // string host = Dns.GetHostName();
         // IPHostEntry ipHost = Dns.GetHostEntry(host);
         // IPAddress ipAddr = ipHost.AddressList[0];
+        if(Application.isEditor)
+            isLocalhost = true;
+        
         if (!isLocalhost)
         {
             IPAddress ipAddr = IPAddress.Parse(clientIP);

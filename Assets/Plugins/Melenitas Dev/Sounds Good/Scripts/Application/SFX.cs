@@ -3,6 +3,8 @@ namespace MelenitasDev.SoundsGood
 	public enum SFX
 	{
 		Step,
-		Seat
+		Seat,
+		SandStep,
+		SeatStep
 	}
 }
