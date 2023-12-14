@@ -7,6 +7,8 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private string gameState;
+    public AreaDetector BowlDetector => _bowlDetector;
+    public AreaDetector PlateDetector => _plateDetector;
     public TCPServerManager Server
     {
         get
@@ -16,16 +18,6 @@ public class GameManager : MonoBehaviour
             return _server;
         }
     }
-    public Camera FloorCamera
-    {
-        get
-        {
-            if(_floorCamera == null)
-                _floorCamera = GameObject.FindGameObjectWithTag("FloorCam").GetComponent<Camera>();
-            return _floorCamera;
-        }
-    }
-    
     public Camera WallCamera
     {
         get
@@ -38,21 +30,11 @@ public class GameManager : MonoBehaviour
     
     public UrgTouchDetector WallUrgTouchDetector => _wallUrgTouchDetector;
 
-    public bool IsSomeone => _isSomeone;
-    public UrgTouchDetector FloorUrgTouchDetector => _floorUrgTouchDetector;
-    public List<GameObject> StepList => _stepList;
 
-    UrgTouchDetector _floorUrgTouchDetector;
     UrgTouchDetector _wallUrgTouchDetector;
     private TCPServerManager _server;
-
-    private bool _isSomeone = false;
-    private float _floorInvokeTime = 0;
-    private float _floorEmptyTime = 0;
-    private Camera _floorCamera;
-    private List<GameObject> _stepList = new List<GameObject>();
-
-    
+    private AreaDetector _bowlDetector;
+    private AreaDetector _plateDetector;
     private Camera _wallCamera;
 
     
@@ -60,6 +42,10 @@ public class GameManager : MonoBehaviour
     {
         _wallUrgTouchDetector = GameObject.FindGameObjectWithTag("WallUrgTouchDetector").GetComponent<UrgTouchDetector>();
         _wallUrgTouchDetector.HokuyoAction += OnFloorAction;
+        
+        _wallUrgTouchDetector.TryGetDetector("bowl", out _bowlDetector);
+        _wallUrgTouchDetector.TryGetDetector("plate", out _plateDetector);
+
     }
     
     private void OnEnable()
@@ -81,7 +67,20 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            SRDebug.Instance.PinAllOptions("Seats");
+        }
+        
+        if (Input.GetKeyDown(KeyCode.O))
+        {
+            SRDebug.Instance.PinAllOptions("Audio");
+        }
 
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            SRDebug.Instance.ClearPinnedOptions();
+        }
     }
 
     public void SendPacketLightOnLeft()
@@ -105,19 +104,18 @@ public class GameManager : MonoBehaviour
     [Button]
     public void ToInitialize()
     {
-        FindObjectOfType<BabyStateMachine>().TurnOffLight();
+        FindObjectOfType<Baby>().TurnOffLight();
     }
 
     [Button]
     public void Someone()
     {
-        FindObjectOfType<BabyStateMachine>().TurnOnLight();
+        FindObjectOfType<Baby>().TurnOnLight();
     }
    
     
     private void OnPacketSimple(PacketSimple obj)
     {
-        Debug.Log($"[Server] OnPacketSample : {obj.stringData}");
         switch (obj.packetKey)
         {
             case "GameState":

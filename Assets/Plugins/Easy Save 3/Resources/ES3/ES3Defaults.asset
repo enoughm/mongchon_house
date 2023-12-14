@@ -32,6 +32,10 @@ MonoBehaviour:
     assemblyNames:
     - AiToolbox
     - AiToolbox.Samples
+    - AllIn1SpriteShaderAssembly
+    - AllIn1VfxAssmebly
+    - AllIn1VfxDemoScriptAssemblies
+    - AllIn1VfxTexDemoAssembly
     - Assembly-CSharp
     - Assembly-CSharp-firstpass
     - AYellowpaper.SerializedCollections
@@ -42,6 +46,9 @@ MonoBehaviour:
     - NavMeshPlus
     - SingularityGroup.HotReload.Runtime
     - SingularityGroup.HotReload.Runtime.Public
+    - SoundsGood.Application
+    - SoundsGood.Domain
+    - SoundsGood.Editor
     - spine-csharp
     - spine-unity
     - spine-unity-examples

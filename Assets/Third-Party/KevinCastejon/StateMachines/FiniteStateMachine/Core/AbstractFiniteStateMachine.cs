@@ -169,6 +169,11 @@ namespace KevinCastejon.FiniteStateMachine
         /// <param name="newStateEnum">The destination state</param>
         public void TransitionToState<T>(T newStateEnum) where T : struct, System.IConvertible
         {
+            if(_currentState == (int)(object)newStateEnum)
+            {
+                return;
+            }
+            
             if (_currentState > -1 && OnAnyStateExit())
             {
                 _states[_currentState].OnExit();

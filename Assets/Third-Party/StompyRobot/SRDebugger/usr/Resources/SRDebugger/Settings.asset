@@ -15,11 +15,7 @@ MonoBehaviour:
   _isEnabled: 1
   _disableWelcomePopup: 1
   _uiInputMode: 0
-<<<<<<< HEAD
-  _defaultTab: 0
-=======
   _defaultTab: 1
->>>>>>> 7f597af225be731538c12023421198572adcca42
   _triggerEnableMode: 2
   _triggerBehaviour: 0
   _errorNotification: 1
@@ -71,9 +67,5 @@ MonoBehaviour:
   _maximumConsoleEntries: 1500
   _enableEventSystemCreation: 0
   _automaticShowCursor: 1
-<<<<<<< HEAD
-  _uiScale: 1.51
-=======
-  _uiScale: 2
->>>>>>> 7f597af225be731538c12023421198572adcca42
+  _uiScale: 2.5
   _unloadOnClose: 0

@@ -43,7 +43,7 @@ public class CandleController : MonoBehaviour
         StartCoroutine(CoLightOn(delay));
     }
 
-    IEnumerator CoLightOn(float delay)
+    public IEnumerator CoLightOn(float delay)
     {
         yield return new WaitForSeconds(delay);
         var anim = candleAnimationHandler.PlayAnimationForState(CandleState.on.ToString(), 0);

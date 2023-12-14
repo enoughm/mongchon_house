@@ -214,13 +214,13 @@ public class UrgTouchDetector : MonoBehaviour
             linkedHighAverageGridDatas = _gridDataAreaList[i].Where(data => data.sensedDataCountAverage > settingData.gridAverageAcceptThreshold).ToList();
             
             //그리드의 위치가 높은 순으로 정렬한다. -type1
-            //linkedHighAverageGridDatas = linkedHighAverageGridDatas.OrderByDescending(o => o.gridPos.y).ToList();
-            //var item = linkedHighAverageGridDatas.First();
+            linkedHighAverageGridDatas = linkedHighAverageGridDatas.OrderByDescending(o => o.gridPos.y).ToList();
+            var item = linkedHighAverageGridDatas.First();
             
             
             //그리드의 평균이 높은 순으로 정렬한다. - type2
-            linkedHighAverageGridDatas = linkedHighAverageGridDatas.OrderByDescending(o => o.sensedDataCountAverage).ToList();
-            var item = linkedHighAverageGridDatas.First();
+            // linkedHighAverageGridDatas = linkedHighAverageGridDatas.OrderByDescending(o => o.sensedDataCountAverage).ToList();
+            // var item = linkedHighAverageGridDatas.First();
             
             //여기서부터는 그리드 간 데이터가 근소하여, 경합이 발생하는 경우를 처리한다.
             //todo: 최대값의 비율만큼 경합조건 붙일 수 있도록 추가
@@ -274,7 +274,11 @@ public class UrgTouchDetector : MonoBehaviour
                      midPointList.Add(_urgGridArray[(int)item.gridPos.x, (int)item.gridPos.y].gridViewPortPos);
             }
 
-            var vector2 = GetMidPoint(midPointList);
+            //type1: gridData의 미들포인트에 터치 발생
+            //var vector2 = GetMidPoint(midPointList);
+            
+            //type2: gridData의 중간 포인트에 터치 발생
+            var vector2 = GetTopMidPoint(midPointList);
             InsertUrgTouchData(vector2);
         }
         
@@ -393,6 +397,20 @@ public class UrgTouchDetector : MonoBehaviour
     {
         UrgGridDataSettingArray[(int)arg1.x, (int)arg1.y].isAvailableArea = arg2;
     }
+
+    public List<Vector2> testVector;
+    
+    Vector2 GetTopMidPoint(List<Vector2> vectorList)
+    {
+        vectorList = vectorList.OrderByDescending(o => o.y).ToList();
+        
+
+        //find same y position vector
+        // var groupBy = vectorList.GroupBy(o => (int)o.y).ToList();
+        // var midPoint = GetMidPoint(groupBy.Last().ToList());
+        // testVector = groupBy.Last().ToList();
+        return vectorList.First();
+    }
     
     Vector2 GetMidPoint(List<Vector2> vectorList)
     {
@@ -415,6 +433,8 @@ public class UrgTouchDetector : MonoBehaviour
 
         return new Vector2(midX, midY);
     }
+
+
 
     /// <summary>
     /// 재귀함수이다, 

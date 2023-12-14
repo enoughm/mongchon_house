@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UniRx;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 public class AreaDetector : MonoBehaviour
 {
@@ -62,7 +64,8 @@ public class AreaDetector : MonoBehaviour
     private Queue<float> _downVelocityQueue = new Queue<float>();
     private Queue<float> _downAverageCountQueue = new Queue<float>();
     
-    
+    private Image areaImage;
+
     //썸띵체크
     private float _isSomethingTime = 0;
     private float _isSomethingDisappearTime = 0;
@@ -74,8 +77,64 @@ public class AreaDetector : MonoBehaviour
 
     private void Awake()
     {
+        areaImage = GetComponent<Image>();
     }
-    
+
+    private void Start()
+    {
+        this.ObserveEveryValueChanged(_ => SROptions.Current.ShowArea).Subscribe(show =>
+        {
+            areaImage.enabled = show;
+        });
+        
+         if (_seatName == "bowl")
+        {
+            this.ObserveEveryValueChanged(_ => SROptions.Current.BowlAreaHeight).Subscribe(show =>
+            {
+                areaImage.rectTransform.sizeDelta = new Vector2(areaImage.rectTransform.sizeDelta.x, show);
+            });
+            
+            this.ObserveEveryValueChanged(_ => SROptions.Current.BowlAreaWidth).Subscribe(show =>
+            {
+                areaImage.rectTransform.sizeDelta = new Vector2(show, areaImage.rectTransform.sizeDelta.y);
+            });
+        
+            this.ObserveEveryValueChanged(_ => SROptions.Current.BowlAreaYOffset).Subscribe(show =>
+            {
+                areaImage.rectTransform.anchoredPosition = new Vector2(areaImage.rectTransform.anchoredPosition.x, show);
+            });
+            
+            this.ObserveEveryValueChanged(_ => SROptions.Current.BowlAreaXOffset).Subscribe(show =>
+            {
+                areaImage.rectTransform.anchoredPosition = new Vector2(show, areaImage.rectTransform.anchoredPosition.y);
+            });
+        }
+
+
+        if (_seatName == "plate")
+        {
+            this.ObserveEveryValueChanged(_ => SROptions.Current.PlateAreaHeight).Subscribe(show =>
+            {
+                areaImage.rectTransform.sizeDelta = new Vector2(areaImage.rectTransform.sizeDelta.x, show);
+            });
+            
+            this.ObserveEveryValueChanged(_ => SROptions.Current.PlateAreaWidth).Subscribe(show =>
+            {
+                areaImage.rectTransform.sizeDelta = new Vector2(show, areaImage.rectTransform.sizeDelta.y);
+            });
+        
+            this.ObserveEveryValueChanged(_ => SROptions.Current.PlateAreaYOffset).Subscribe(show =>
+            {
+                areaImage.rectTransform.anchoredPosition = new Vector2(areaImage.rectTransform.anchoredPosition.x, show);
+            });
+            
+            this.ObserveEveryValueChanged(_ => SROptions.Current.PlateAreaXOffset).Subscribe(show =>
+            {
+                areaImage.rectTransform.anchoredPosition = new Vector2(show, areaImage.rectTransform.anchoredPosition.y);
+            });
+        }
+    }
+
     public void SetData(string seatName, UrgTouchDetector urgTouchDetector)
     {
         _seatName = seatName;

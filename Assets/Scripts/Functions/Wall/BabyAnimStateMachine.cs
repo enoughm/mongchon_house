@@ -7,6 +7,7 @@ using KevinCastejon.FiniteStateMachine;
 using Sirenix.OdinInspector;
 using Spine.Unity;
 using Spine.Unity.Examples;
+using UnityHFSM;
 
 public class BabyAnimStateMachine : AbstractFiniteStateMachine
 {
@@ -39,9 +40,34 @@ public class BabyAnimStateMachine : AbstractFiniteStateMachine
     [Button]public void ToIdle() => TransitionToState(State.IDLE);
     [Button]public void ToInteractionOne()=> TransitionToState(State.INTERACTION_ONE);
     [Button]public void ToInteractionTwo()=> TransitionToState(State.INTERACTION_TWO);
+
+    [Button]
+    public IEnumerator CoInteractionOneTwo()
+    {
+        // TransitionToState(State.INTERACTION_ONE);
+        // var anim = interactionObject.GetAnimationForState("interaction");
+        // yield return new WaitForSeconds(anim.Duration);
+        // TransitionToState(State.INTERACTION_TWO);
+        // var anim2 = interactionObject.GetAnimationForState("interaction2");
+        // yield return new WaitForSeconds(anim2.Duration);
+        // TransitionToState(State.INTERACTION_ONE);
+        yield return null;
+    }
+    
+    
     [Button]public void ToWalk() =>  TransitionToState(State.WALK);
     [Button]public void ToRun() => TransitionToState(State.RUN);
     [Button]public void ToLightOn() => TransitionToState(State.LIGHT_ON);
+
+    public void SetLookAtTr(Transform lookTr)
+    {
+        if (lookTr == null)
+            return;
+        
+        //if target transform is left, then flip animation
+        var isLeft = this.transform.position.x < lookTr.position.x;
+        this.transform.localScale = new Vector3(isLeft ? -1 : 1, 1, 1);
+    }
 
     private SkeletonAnimationHandleExample UpdateObjects(State state)
     {
@@ -64,9 +90,9 @@ public class BabyAnimStateMachine : AbstractFiniteStateMachine
 
         return idleObject;
     }
-    
-    
-    
+
+
+
     public class IdleState : AbstractState
     {
         private SkeletonAnimationHandleExample curAnimationHandler;
@@ -105,15 +131,8 @@ public class BabyAnimStateMachine : AbstractFiniteStateMachine
         public override void OnEnter()
         {
             curAnimationHandler = GetStateMachine<BabyAnimStateMachine>().UpdateObjects(GetEnumValue<State>());
+            curAnimationHandler.PlayAnimationForState("interaction2", 0);
             curAnimationHandler.skeletonAnimation.loop = false;
-            CoAnim();
-        }
-
-        async void CoAnim()
-        {
-            var animation = curAnimationHandler.PlayAnimationForState("interaction2", 0);
-            await Task.Delay(TimeSpan.FromSeconds(animation.Duration));
-            TransitionToState(State.INTERACTION_ONE);
         }
         public override void OnUpdate()
         {
@@ -163,13 +182,7 @@ public class BabyAnimStateMachine : AbstractFiniteStateMachine
         {
             curAnimationHandler = GetStateMachine<BabyAnimStateMachine>().UpdateObjects(GetEnumValue<State>());
             curAnimationHandler.skeletonAnimation.loop = false;
-            CoAnim();
-        }
-        
-        async void CoAnim()
-        {
             var animation = curAnimationHandler.PlayAnimationForState("on", 0);
-            curAnimationHandler.skeletonAnimation.loop = false;
         }
         
         public override void OnUpdate()

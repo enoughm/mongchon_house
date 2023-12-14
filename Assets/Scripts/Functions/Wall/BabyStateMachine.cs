@@ -12,13 +12,9 @@ public class BabyStateMachine : AbstractFiniteStateMachine
     [SerializeField] private LightManager lightManager;
     [SerializeField] private BabyAnimStateMachine animStateMachine;
     [SerializeField] private CandleController leftCandle;
-    [SerializeField] private Transform leftCandleFirePos;
     [SerializeField] private CandleController rightCandle;
     [FormerlySerializedAs("rightCandleFirePos")] [SerializeField] private Transform rightCandleFireTr;
     [SerializeField] private Transform initTr;
-    [SerializeField] private Transform leftMaxTr;
-    [SerializeField] private Transform rightMaxTr;
-    
     [SerializeField] private Transform moveTargetTr;
 
 
@@ -75,16 +71,6 @@ public class BabyStateMachine : AbstractFiniteStateMachine
 
     private void SetMoveTarget(Transform transform)
     {
-        //check max tr
-        if (transform.position.x > rightMaxTr.position.x)
-        {
-            transform = rightMaxTr;
-        }
-        else if (transform.position.x < leftMaxTr.position.x)
-        {
-            transform = leftMaxTr;
-        }
-    
         moveTargetTr = transform;
     }
 
