@@ -19,11 +19,13 @@ public class UrgDeviceEthernetCustom : UrgDevice
 {
 	[Header("Debug")]
 	public bool useSensedInvoke = false;
-	public int minAngleIndex = 0;
-	public int maxAngleIndex = 0;
-	public float distance = 0;
+	public float moveDistance = 10;
+	public int angleIntervalStep = 50;
+	public int angleMoveStep = 10;
 	public float updateInterval = 0.025f;
-
+	private float distance = 750;
+	private int minAngleIndex = 500;
+	private int maxAngleIndex = 525;
 	
 //	private Thread listenThread;
 	private Thread clientThread;
@@ -76,23 +78,23 @@ public class UrgDeviceEthernetCustom : UrgDevice
 	    
 	    if (useSensedInvoke)
 	    {
-		    if (Input.GetKeyDown(KeyCode.UpArrow))
+		    if (Input.GetKey(KeyCode.UpArrow))
 		    {
-			    minAngleIndex -= 100;
-			    maxAngleIndex -= 100;
+			    maxAngleIndex = minAngleIndex + angleIntervalStep;
+			    minAngleIndex -= angleMoveStep;
 		    }
-		    if (Input.GetKeyDown(KeyCode.DownArrow))
+		    if (Input.GetKey(KeyCode.DownArrow))
 		    {
-			    minAngleIndex += 100;
-			    maxAngleIndex += 100;
+			    maxAngleIndex = minAngleIndex + angleIntervalStep;
+			    minAngleIndex += angleMoveStep;
 		    }
-		    if (Input.GetKeyDown(KeyCode.LeftArrow))
+		    if (Input.GetKey(KeyCode.LeftArrow))
 		    {
-			    distance += 100;
+			    distance += moveDistance;
 		    }
-		    if (Input.GetKeyDown(KeyCode.RightArrow))
+		    if (Input.GetKey(KeyCode.RightArrow))
 		    {
-			    distance -= 100;
+			    distance -= moveDistance;
 		    }
 	    }
     }

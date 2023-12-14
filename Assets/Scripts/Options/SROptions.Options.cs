@@ -92,6 +92,13 @@ public partial class SROptions {
         set => Managers.Save.LocalSave("WaitTIme", value);
     }
     
-    
+    [Category("Playing")]
+    [NumberRange(4,12)]
+    [Increment(1f)]
+    public int MinBug
+    {
+        get => Managers.Save.LocalLoad<int>("MinBug", 4);
+        set => Managers.Save.LocalSave("MinBug", value);
+    }
 }
 

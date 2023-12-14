@@ -12,7 +12,7 @@ public class SeatController : MonoBehaviour
 {
     public PathManager EnterPath => enterPath.Random();
     public int BugCount => bugList.Count;
-    public bool CanEnter => bugList.Count < 2;
+    public bool CanEnter => bugList.Count < 5;
     
     [SerializeField] SkeletonAnimation skeletonAnimation;
     [SerializeField] SkeletonAnimationHandleExample seatAnimationHandler;

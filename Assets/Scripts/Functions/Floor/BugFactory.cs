@@ -10,7 +10,7 @@ public class BugFactory : MonoBehaviour
     [SerializeField] List<Bug> madeBugList = new List<Bug>();
     [SerializeField] List<SeatController> _seatControllers = new List<SeatController>();
     
-    private int showingBugMin = 4;
+    [SerializeField] private int showingBugMin => SROptions.Current.MinBug;
 
     private float time = 0;
     private float interval = 2.5f;
