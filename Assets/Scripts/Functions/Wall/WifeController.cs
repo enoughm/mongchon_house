@@ -62,10 +62,10 @@ public class WifeController : MonoBehaviour
         frontAnimation.state.TimeScale = 1f;
         frontAnimationHandle.PlayAnimationForState("1", 0);
         var data = frontAnimationHandle.GetAnimationForState("1");
-        delay = DOVirtual.DelayedCall(data.Duration - 0.1f, () =>
+        delay = DOVirtual.DelayedCall(data.Duration - 0.2f, () =>
         {
             RewindSpineAnimation();
-            DOVirtual.DelayedCall(data.Duration, () =>
+            DOVirtual.DelayedCall(data.Duration- 0.05f, () =>
             {
                 _fsm.RequestStateChange(State.Idle);
             });

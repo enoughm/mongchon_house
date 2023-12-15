@@ -40,7 +40,8 @@ public class Baby : MonoBehaviour
     private bool reached;
     
     [Header("Wait")]
-    [SerializeField] Transform initTr;
+    [SerializeField] Transform noneTr; //none tr
+    [SerializeField] Transform initTr; //idle tr
 
     [Header("Components")]
     [SerializeField] LightManager lightManager;
@@ -72,7 +73,7 @@ public class Baby : MonoBehaviour
     private void Start()
     {
         _fsm = new StateMachine<State>();
-        _fsm.AddState(State.None);
+        _fsm.AddState(State.None, new CoState<State>(this, None, OnEnter, loop: false));
         _fsm.AddState(State.Idle, new CoState<State>(this, Idle, OnEnter, loop: false));
         _fsm.AddState(State.LightOn, new CoState<State>(this, LightOn, OnEnter, loop: false));
         _fsm.AddState(State.LightOff, new CoState<State>(this, LightOff, OnEnter, loop: false));
@@ -151,6 +152,14 @@ public class Baby : MonoBehaviour
     }
     #endregion
 
+    private IEnumerator None(CoState<State, string> arg)
+    {
+        //throw new NotImplementedException();
+        //251.1 199.37 (3)
+        //(7)
+        yield break;
+    }
+    
     //불을 키고나서 좌우로 몇번 느리게 왔다갔다 걸어다닌 후에
     //장남에게 이동한다.
     IEnumerator Idle()
@@ -227,9 +236,9 @@ public class Baby : MonoBehaviour
         rightCandle.LightOff();
         lightManager.ToDark(3);
         
-        SetMoveTarget(initTr, false);
+        SetMoveTarget(noneTr, false);
         PlayAnimation(AnimationState.RUN);
-        if(initTr.transform.position.x < transform.position.x)
+        if(noneTr.transform.position.x < transform.position.x)
             SetLeft();
         else
             SetRight();

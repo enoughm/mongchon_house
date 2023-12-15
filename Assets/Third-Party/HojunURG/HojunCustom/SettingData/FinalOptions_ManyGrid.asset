@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   touchGrid: {x: 60, y: 30}
   gridAverageAcceptThreshold: 1
-  gridAreaCountCheckThreshold: 3
+  gridAreaCountCheckThreshold: 1
   competitionApproveThreshold: 1
-  gridAverageMaxCollectCount: 3
+  gridAverageMaxCollectCount: 1
   touchCheckSpeed: 1
   touchCheckInGridArea: 0
   touchDownCheckDuration: 0.01
