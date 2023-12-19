@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using MelenitasDev.SoundsGood;
 using Spine;
 using Spine.Unity;
 using Spine.Unity.Examples;
@@ -75,6 +76,7 @@ public class WifeController : MonoBehaviour
     private void AnimatingOnEnter(State<State, string> obj)
     {
         delay?.Kill();
+        Managers.Sound.PlaySfx(SFX.TouchSound);
         outerGlowClickEffect?.TouchEffect();
         backAnimationObject.gameObject.SetActive(false);
         frontAnimationHandle.gameObject.SetActive(true);

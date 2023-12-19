@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using MelenitasDev.SoundsGood;
 using Sirenix.OdinInspector;
 using Spine.Unity;
 using Spine.Unity.Examples;
@@ -81,6 +82,7 @@ public class NormalAnimationCharacterStateMachine : MonoBehaviour
         delayTween?.Kill();
         animation.loop = false;
         animationHandle.PlayAnimationForState("2", 0);
+        Managers.Sound.PlaySfx(SFX.TouchSound);
         var data = animationHandle.GetAnimationForState("2");
         delayTween = DOVirtual.DelayedCall(data.Duration, () =>
         {

@@ -18,3 +18,8 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 6efc366da27cb004a980a007cee5974d, type: 3}
     compressionPreset: 1
     forceToMono: 0
+  - tag: TouchSound
+    clips:
+    - {fileID: 8300000, guid: 80ba52a1013e57a4ba51991c2cf593ba, type: 3}
+    compressionPreset: 1
+    forceToMono: 0

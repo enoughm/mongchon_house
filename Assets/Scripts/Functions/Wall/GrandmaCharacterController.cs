@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using MelenitasDev.SoundsGood;
 using Spine.Unity;
 using Spine.Unity.Examples;
 using UniRx;
@@ -85,6 +86,8 @@ public class GrandmaCharacterController : MonoBehaviour
         outerGlowClickEffect?.TouchEffect();
         animation.loop = false;
         animationHandle.PlayAnimationForState("interaction2", 0);
+        Managers.Sound.PlaySfx(SFX.TouchSound);
+
         var data = animationHandle.GetAnimationForState("interaction2");
         delay?.Kill();
         delay = DOVirtual.DelayedCall(data.Duration, () =>
