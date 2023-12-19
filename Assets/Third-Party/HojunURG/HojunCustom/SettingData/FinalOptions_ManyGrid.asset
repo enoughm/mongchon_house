@@ -13,17 +13,17 @@ MonoBehaviour:
   m_Name: FinalOptions_ManyGrid
   m_EditorClassIdentifier: 
   touchGrid: {x: 60, y: 30}
-  gridAverageAcceptThreshold: 1
-  gridAreaCountCheckThreshold: 1
+  gridAverageAcceptThreshold: 0.1
+  gridAreaCountCheckThreshold: 0
   competitionApproveThreshold: 1
   gridAverageMaxCollectCount: 1
-  touchCheckSpeed: 1
+  touchCheckSpeed: 10
   touchCheckInGridArea: 0
-  touchDownCheckDuration: 0.01
-  touchMergeDistanceX: 0.01
-  touchMergeDistanceY: 0.01
-  touchMergeDistanceXForMerge: 0.01
-  touchMergeDistanceYForMerge: 0.01
+  touchDownCheckDuration: 0.1
+  touchMergeDistanceX: 0.1
+  touchMergeDistanceY: 0.1
+  touchMergeDistanceXForMerge: 0.1
+  touchMergeDistanceYForMerge: 0.1
   touchClickableDistance: 0.1
   touchCheckingDuration: 0.1
   touchInvokeDuration: 0.1

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using Sirenix.OdinInspector;
 using Spine.Unity;
 using Spine.Unity.Examples;
 using UnityEngine;
@@ -18,11 +19,20 @@ public class NormalAnimationCharacterStateMachine : MonoBehaviour
     [SerializeField] private string layerName;
     [SerializeField] private SkeletonAnimationHandleExample animationHandle;
     [SerializeField] private SkeletonAnimation animation;
+
+    [SerializeField] private OuterGlowIdleEffect outerGlowIdleEffect;
+    [SerializeField] private OuterGlowClickEffect outerGlowClickEffect;
+    
     private StateMachine<State> _fsm;
+    private Vector3 initPos;
+    private Tween delayTween;
+    
     
     private void Start()
     {
         _fsm = new StateMachine<State>();
+        
+        initPos = animation.transform.position;
         
         //idle - 기본 애니메이션 재생
         _fsm.AddState(State.Idle, onEnter:IdleOnEnter);
@@ -34,30 +44,50 @@ public class NormalAnimationCharacterStateMachine : MonoBehaviour
         
         _fsm.Init();
         
+        
         Managers.Input.MouseAction += OnMouseEvent;
         Managers.Game.WallUrgTouchDetector.HokuyoAction += OnHokuyoEvent;
+        Managers.Game.onLightStateChanged += OnLightStateChanged;
+        outerGlowIdleEffect.StopIdleEffect();
     }
-    
+
+    private void OnLightStateChanged(bool obj)
+    {
+        if (obj)
+        {
+            outerGlowIdleEffect.BeginIdleEffect();
+        }
+        else
+        {
+            outerGlowIdleEffect.StopIdleEffect();
+        }
+    }
+
     private void Update()
     {
         _fsm.OnLogic();
+        
     }
 
     private void IdleOnEnter(State<State, string> obj)
     {
+        delayTween?.Kill();
         animation.loop = true;
         animationHandle.PlayAnimationForState("1", 0);
     }
 
     private void AnimatingOnEnter(State<State, string> obj)
     {
+        delayTween?.Kill();
         animation.loop = false;
         animationHandle.PlayAnimationForState("2", 0);
         var data = animationHandle.GetAnimationForState("2");
-        DOVirtual.DelayedCall(data.Duration, () =>
+        delayTween = DOVirtual.DelayedCall(data.Duration, () =>
         {
             _fsm.RequestStateChange(State.Idle);
         });
+        
+        outerGlowClickEffect?.TouchEffect();
     }
     
     private void OnMouseEvent(Define.MouseEvent obj)
@@ -73,8 +103,7 @@ public class NormalAnimationCharacterStateMachine : MonoBehaviour
         {
             if (hit.transform.gameObject == gameObject)
             {
-                if (_fsm.ActiveStateName == State.Idle)
-                    _fsm.RequestStateChange(State.Animating);
+                _fsm.RequestStateChange(State.Animating, true);
             }
         }
     }
@@ -96,8 +125,7 @@ public class NormalAnimationCharacterStateMachine : MonoBehaviour
                     case UrgTouchState.TouchMoment:
                         break;
                     case UrgTouchState.TouchDown:
-                        if (_fsm.ActiveStateName == State.Idle)
-                            _fsm.RequestStateChange(State.Animating);
+                        _fsm.RequestStateChange(State.Animating, true);
                         break;
                     case UrgTouchState.TouchPress:
                         break;

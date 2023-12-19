@@ -22,6 +22,9 @@ public class WifeController : MonoBehaviour
     
     [SerializeField] private SkeletonAnimationHandleExample frontAnimationHandle;
     [SerializeField] private SkeletonAnimation frontAnimation;
+
+    [SerializeField] private OuterGlowIdleEffect outerGlowIdleEffect;
+    [SerializeField] private OuterGlowClickEffect outerGlowClickEffect;
     
     private StateMachine<State> _fsm;
     private Tween delay;
@@ -41,6 +44,8 @@ public class WifeController : MonoBehaviour
         
         Managers.Input.MouseAction += OnMouseEvent;
         Managers.Game.WallUrgTouchDetector.HokuyoAction += OnHokuyoEvent;
+        Managers.Game.onLightStateChanged += OnLightStateChanged;
+        outerGlowIdleEffect.StopIdleEffect();
     }
 
     private void Update()
@@ -48,14 +53,29 @@ public class WifeController : MonoBehaviour
         _fsm.OnLogic();
     }
 
+    private void OnLightStateChanged(bool obj)
+    {
+        if (obj)
+        {
+            outerGlowIdleEffect.BeginIdleEffect();
+        }
+        else
+        {
+            outerGlowIdleEffect.StopIdleEffect();
+        }
+    }
+    
     private void IdleOnEnter(State<State, string> obj)
     {
+        delay?.Kill();
         frontAnimationHandle.gameObject.SetActive(false);
         backAnimationObject.gameObject.SetActive(true);
     }
 
     private void AnimatingOnEnter(State<State, string> obj)
     {
+        delay?.Kill();
+        outerGlowClickEffect?.TouchEffect();
         backAnimationObject.gameObject.SetActive(false);
         frontAnimationHandle.gameObject.SetActive(true);
         frontAnimation.loop = false;
@@ -97,8 +117,7 @@ public class WifeController : MonoBehaviour
         {
             if (hit.transform.gameObject == gameObject)
             {
-                if (_fsm.ActiveStateName == State.Idle)
-                    _fsm.RequestStateChange(State.Animating);
+                    _fsm.RequestStateChange(State.Animating, true);
             }
         }
     }
@@ -120,8 +139,7 @@ public class WifeController : MonoBehaviour
                     case UrgTouchState.TouchMoment:
                         break;
                     case UrgTouchState.TouchDown:
-                        if (_fsm.ActiveStateName == State.Idle)
-                            _fsm.RequestStateChange(State.Animating);
+                            _fsm.RequestStateChange(State.Animating, true);
                         break;
                     case UrgTouchState.TouchPress:
                         break;

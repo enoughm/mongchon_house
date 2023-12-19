@@ -43,6 +43,8 @@ MonoBehaviour:
     - Flexalon
     - HierarchicalFiniteStateMachineAssembly
     - Hierarchy2.Runtime
+    - LeTai.TrueShadow
+    - LeTai.TrueShadow.Demo
     - NavMeshPlus
     - SingularityGroup.HotReload.Runtime
     - SingularityGroup.HotReload.Runtime.Public

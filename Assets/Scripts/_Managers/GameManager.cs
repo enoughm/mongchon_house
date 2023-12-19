@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
+using UnityEditor.Build;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -36,6 +37,8 @@ public class GameManager : MonoBehaviour
     private AreaDetector _bowlDetector;
     private AreaDetector _plateDetector;
     private Camera _wallCamera;
+
+    public Action<bool> onLightStateChanged;
 
     
     private void Awake()
@@ -105,12 +108,14 @@ public class GameManager : MonoBehaviour
     public void ToInitialize()
     {
         FindObjectOfType<Baby>().TurnOffLight();
+        onLightStateChanged?.Invoke(false);
     }
 
     [Button]
     public void Someone()
     {
         FindObjectOfType<Baby>().TurnOnLight();
+        onLightStateChanged?.Invoke(true);
     }
    
     

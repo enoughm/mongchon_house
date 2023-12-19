@@ -19,6 +19,12 @@ public class GrandmaCharacterController : MonoBehaviour
     [SerializeField] private string layerName;
     [SerializeField] private SkeletonAnimationHandleExample animationHandle;
     [SerializeField] private SkeletonAnimation animation;
+    
+    
+    [SerializeField] private OuterGlowIdleEffect outerGlowIdleEffect;
+    [SerializeField] private OuterGlowClickEffect outerGlowClickEffect;
+    
+    
     private StateMachine<State> _fsm;
     private Tween delay;
     
@@ -38,6 +44,8 @@ public class GrandmaCharacterController : MonoBehaviour
         
         Managers.Input.MouseAction += OnMouseEvent;
         Managers.Game.WallUrgTouchDetector.HokuyoAction += OnHokuyoEvent;
+        Managers.Game.onLightStateChanged += OnLightStateChanged;
+        outerGlowIdleEffect.StopIdleEffect();
         this.ObserveEveryValueChanged(_=>Managers.Game.PlateDetector.IsSomething).Subscribe(OnIsSomethingChanged);
     }
 
@@ -54,6 +62,18 @@ public class GrandmaCharacterController : MonoBehaviour
         }
     }
     
+    private void OnLightStateChanged(bool obj)
+    {
+        if (obj)
+        {
+            outerGlowIdleEffect.BeginIdleEffect();
+        }
+        else
+        {
+            outerGlowIdleEffect.StopIdleEffect();
+        }
+    }
+    
     private void IdleOnEnter(State<State, string> obj)
     {
         animation.loop = true;
@@ -62,23 +82,27 @@ public class GrandmaCharacterController : MonoBehaviour
 
     private void AnimatingOnEnter(State<State, string> obj)
     {
+        outerGlowClickEffect?.TouchEffect();
         animation.loop = false;
         animationHandle.PlayAnimationForState("interaction2", 0);
         var data = animationHandle.GetAnimationForState("interaction2");
+        delay?.Kill();
         delay = DOVirtual.DelayedCall(data.Duration, () =>
         {
-            _fsm.RequestStateChange(State.Idle);
+            _fsm.RequestStateChange(State.Idle, true);
         });
     }
     
     private void IsPlateOnEnter(State<State, string> obj)
     {
+        delay?.Kill();
+        outerGlowClickEffect?.TouchEffect();
         animation.loop = false;
         animationHandle.PlayAnimationForState("idle2", 0);
         var data = animationHandle.GetAnimationForState("idle2");
         delay = DOVirtual.DelayedCall(data.Duration, () =>
         {
-            _fsm.RequestStateChange(State.Idle);
+            _fsm.RequestStateChange(State.Idle, true);
         });
     }
     
@@ -95,8 +119,7 @@ public class GrandmaCharacterController : MonoBehaviour
         {
             if (hit.transform.gameObject == gameObject)
             {
-                if (_fsm.ActiveStateName == State.Idle)
-                    _fsm.RequestStateChange(State.Animating);
+                _fsm.RequestStateChange(State.Animating, true);
             }
         }
     }
@@ -118,8 +141,7 @@ public class GrandmaCharacterController : MonoBehaviour
                     case UrgTouchState.TouchMoment:
                         break;
                     case UrgTouchState.TouchDown:
-                        if (_fsm.ActiveStateName == State.Idle)
-                            _fsm.RequestStateChange(State.Animating);
+                        _fsm.RequestStateChange(State.Animating, true);
                         break;
                     case UrgTouchState.TouchPress:
                         break;
