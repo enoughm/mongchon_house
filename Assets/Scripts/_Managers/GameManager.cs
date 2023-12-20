@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviour
     private AreaDetector _plateDetector;
     private Camera _wallCamera;
 
+    public bool lightState = false;
     public Action<bool> onLightStateChanged;
 
     
@@ -108,6 +109,7 @@ public class GameManager : MonoBehaviour
     {
         FindObjectOfType<Baby>().TurnOffLight();
         onLightStateChanged?.Invoke(false);
+        lightState = false;
     }
 
     [Button]
@@ -115,6 +117,7 @@ public class GameManager : MonoBehaviour
     {
         FindObjectOfType<Baby>().TurnOnLight();
         onLightStateChanged?.Invoke(true);
+        lightState = true;
     }
    
     
