@@ -100,5 +100,14 @@ public partial class SROptions {
         get => Managers.Save.LocalLoad<int>("MinBug", 4);
         set => Managers.Save.LocalSave("MinBug", value);
     }
+    
+    [Category("Playing")]
+    [NumberRange(0.5f, 1.5f)]
+    [Increment(0.1f)]
+    public float ChaserScale
+    {
+        get => Managers.Save.LocalLoad<float>("ChaserScale", 0.85f);
+        set => Managers.Save.LocalSave("ChaserScale", value);
+    }
 }
 
