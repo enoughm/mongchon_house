@@ -16,6 +16,7 @@ public class BowlController : MonoBehaviour
         this.ObserveEveryValueChanged(_=>Managers.Game.BowlDetector.IsSomething).Subscribe(OnIsSomethingChanged);
         this.ObserveEveryValueChanged(_=>SROptions.Current.BowlParticleXOffset).Subscribe(_=>OnChangeXOffset(_));
         this.ObserveEveryValueChanged(_=>SROptions.Current.BowlParticleYOffset).Subscribe(_=>OnChangeYOffset(_));
+        StartCoroutine(Check());
     }
 
     private void OnChangeYOffset(float f)
@@ -42,6 +43,16 @@ public class BowlController : MonoBehaviour
             var mainModule = _smokeParticle.main;
             mainModule.loop = false;
             Managers.Sound.StopFire();
+        }
+    }
+
+    IEnumerator Check()
+    {
+        while (true)
+        {
+            if(!Managers.Game.BowlDetector.IsSomething)
+                Managers.Sound.StopFire();
+            yield return new WaitForSeconds(1);
         }
     }
 }

@@ -104,6 +104,7 @@ public class GrandmaCharacterController : MonoBehaviour
         delay?.Kill();
         outerGlowIdleEffect.StopIdleEffect();
         outerGlowClickEffect?.TouchEffect();
+        Managers.Sound.PlaySfx(SFX.TouchSound);
         animation.loop = false;
         animationHandle.PlayAnimationForState("idle2", 0);
         var data = animationHandle.GetAnimationForState("idle2");

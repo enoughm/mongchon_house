@@ -40,7 +40,7 @@ public class SoundManager : MonoBehaviour
 
     public void StopFire()
     {
-        fireSound?.Stop(2);
+        fireSound?.Stop(0);
     }
     
     public void PlaySfx(SFX sfx)

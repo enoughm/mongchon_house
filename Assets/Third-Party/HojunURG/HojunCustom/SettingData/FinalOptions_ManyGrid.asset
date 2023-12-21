@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5fd681c76e44d749a42c398ec886f9f, type: 3}
   m_Name: FinalOptions_ManyGrid
   m_EditorClassIdentifier: 
-  touchGrid: {x: 60, y: 30}
+  touchGrid: {x: 60, y: 100}
   gridAverageAcceptThreshold: 0.1
   gridAreaCountCheckThreshold: 0
   competitionApproveThreshold: 1
@@ -20,11 +20,11 @@ MonoBehaviour:
   touchCheckSpeed: 10
   touchCheckInGridArea: 0
   touchDownCheckDuration: 0.1
-  touchMergeDistanceX: 0.1
-  touchMergeDistanceY: 0.1
-  touchMergeDistanceXForMerge: 0.1
-  touchMergeDistanceYForMerge: 0.1
-  touchClickableDistance: 0.1
+  touchMergeDistanceX: 0.065
+  touchMergeDistanceY: 0.065
+  touchMergeDistanceXForMerge: 0.065
+  touchMergeDistanceYForMerge: 0.065
+  touchClickableDistance: 0.065
   touchCheckingDuration: 0.1
   touchInvokeDuration: 0.1
   ignoreScreenPaddingXRatio: 0
