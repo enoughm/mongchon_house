@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using Spine.Unity;
 using UnityEngine;
@@ -45,6 +46,7 @@ public class Chaser : MonoBehaviour
     public float chasingAcceleration = 3;
     public float chasingTimeScale = 1.75f;
     public float chasingStopDistance = 1.5f;
+    public float chasingMaxDistance = 24f;
 
     public float waitingSpeed = 0.5f;
     public float waitingRange = 0.5f;
@@ -80,6 +82,11 @@ public class Chaser : MonoBehaviour
     {
         Managers.Input.MouseAction -= OnMouseEvent;
         Managers.Game.FloorUrgTouchDetector.HokuyoAction -= OnHokuyoEvent;
+    }
+
+    private void Start()
+    {
+        transform.localScale = Vector3.one * SROptions.Current.ChaserScale;
     }
 
     // Update is called once per frame
@@ -132,6 +139,7 @@ public class Chaser : MonoBehaviour
     
     public void SetState(State state, bool force = false)
     {
+        transform.localScale = Vector3.one * SROptions.Current.ChaserScale;
         if(force)
             _prevState = State.None;
         _curState = state;
@@ -347,8 +355,18 @@ public class Chaser : MonoBehaviour
             SetState(State.Waiting);
             return;
         }
+
+        var dis = Vector2.Distance(this.transform.position, closeStepInChasing);
         
-        if(Vector2.Distance(this.transform.position, closeStepInChasing) < chasingStopDistance)
+        if(dis < chasingStopDistance)
+        {
+            _navMeshAgent.ResetPath();
+            Debug.Log("Chasing Success");
+            SetState(State.Waiting);
+            return;
+        }
+
+        if (dis > chasingMaxDistance)
         {
             _navMeshAgent.ResetPath();
             Debug.Log("Chasing Success");

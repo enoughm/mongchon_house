@@ -50,7 +50,10 @@ public class BugFactory : MonoBehaviour
         var targetSeat = _seatControllers[targetSeatIndex];
         var bug = Instantiate(targetBug, this.transform);
 
-        if (!targetSeat.CanEnter || bug == null)
+        if (bug == null)
+            return;
+        
+        if (!targetSeat.CanEnter)
         {
             DestroyImmediate(bug.gameObject);
             return;
