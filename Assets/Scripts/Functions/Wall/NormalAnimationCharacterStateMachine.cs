@@ -75,10 +75,13 @@ public class NormalAnimationCharacterStateMachine : MonoBehaviour
         delayTween?.Kill();
         animation.loop = true;
         animationHandle.PlayAnimationForState("1", 0);
+        if(Managers.Game.lightState)
+            outerGlowIdleEffect.BeginIdleEffect();
     }
 
     private void AnimatingOnEnter(State<State, string> obj)
     {
+        outerGlowIdleEffect.StopIdleEffect();
         delayTween?.Kill();
         animation.loop = false;
         animationHandle.PlayAnimationForState("2", 0);
@@ -94,6 +97,10 @@ public class NormalAnimationCharacterStateMachine : MonoBehaviour
     
     private void OnMouseEvent(Define.MouseEvent obj)
     {
+        if (!Managers.Game.lightState)
+            return;
+
+        
         if (obj != Define.MouseEvent.Click)
             return;
 
@@ -113,6 +120,10 @@ public class NormalAnimationCharacterStateMachine : MonoBehaviour
     
     private void OnHokuyoEvent(UrgTouchState state, Vector2 arg2)
     {
+        if (!Managers.Game.lightState)
+            return;
+
+        
         Ray ray = Managers.Game.WallCamera.ViewportPointToRay(arg2);
         RaycastHit hit;
         int layerMask = 1 << LayerMask.NameToLayer(layerName);

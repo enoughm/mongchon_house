@@ -43,9 +43,15 @@ public class UrgTouchDetectorSettingGridView : MonoBehaviour
         {
             for (int y = 0; y < (int)setGridVector2.y; y++)
             {
-                Vector2 gridPos = new Vector2(x, y);
-                var item = urgGridDataSettingArray[x, y];
-                _touchGridItems[x,y].SetData(item.gridPos, item.isAvailableArea);
+                try
+                {
+                    Vector2 gridPos = new Vector2(x, y);
+                    var item = urgGridDataSettingArray[x, y];
+                    _touchGridItems[x,y].SetData(item.gridPos, item.isAvailableArea);
+                }
+                catch (Exception e)
+                {
+                }
             }
         }
     }

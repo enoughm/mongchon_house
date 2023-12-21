@@ -71,13 +71,14 @@ public class WifeController : MonoBehaviour
         delay?.Kill();
         frontAnimationHandle.gameObject.SetActive(false);
         backAnimationObject.gameObject.SetActive(true);
+        if(Managers.Game.lightState)
+            outerGlowIdleEffect.BeginIdleEffect();
     }
 
     private void AnimatingOnEnter(State<State, string> obj)
     {
         delay?.Kill();
-        Managers.Sound.PlaySfx(SFX.TouchSound);
-        outerGlowClickEffect?.TouchEffect();
+        outerGlowIdleEffect.StopIdleEffect();
         backAnimationObject.gameObject.SetActive(false);
         frontAnimationHandle.gameObject.SetActive(true);
         frontAnimation.loop = false;
@@ -108,6 +109,9 @@ public class WifeController : MonoBehaviour
     
     private void OnMouseEvent(Define.MouseEvent obj)
     {
+        if (!Managers.Game.lightState)
+            return;
+        
         if (obj != Define.MouseEvent.Click)
             return;
 
@@ -119,6 +123,10 @@ public class WifeController : MonoBehaviour
         {
             if (hit.transform.gameObject == gameObject)
             {
+                Managers.Sound.PlaySfx(SFX.TouchSound);
+                outerGlowClickEffect?.TouchEffect();
+                        
+                if(_fsm.ActiveStateName == State.Idle)
                     _fsm.RequestStateChange(State.Animating, true);
             }
         }
@@ -127,6 +135,9 @@ public class WifeController : MonoBehaviour
     
     private void OnHokuyoEvent(UrgTouchState state, Vector2 arg2)
     {
+        if (!Managers.Game.lightState)
+            return;
+
         Ray ray = Managers.Game.WallCamera.ViewportPointToRay(arg2);
         RaycastHit hit;
         int layerMask = 1 << LayerMask.NameToLayer(layerName);
@@ -141,6 +152,10 @@ public class WifeController : MonoBehaviour
                     case UrgTouchState.TouchMoment:
                         break;
                     case UrgTouchState.TouchDown:
+                        Managers.Sound.PlaySfx(SFX.TouchSound);
+                        outerGlowClickEffect?.TouchEffect();
+                        
+                        if(_fsm.ActiveStateName == State.Idle)
                             _fsm.RequestStateChange(State.Animating, true);
                         break;
                     case UrgTouchState.TouchPress:

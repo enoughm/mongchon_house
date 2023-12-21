@@ -77,6 +77,8 @@ public class GrandmaCharacterController : MonoBehaviour
     
     private void IdleOnEnter(State<State, string> obj)
     {
+        if(Managers.Game.lightState)
+            outerGlowIdleEffect.BeginIdleEffect();
         animation.loop = true;
         animationHandle.PlayAnimationForState("idle", 0);
     }
@@ -84,6 +86,7 @@ public class GrandmaCharacterController : MonoBehaviour
     private void AnimatingOnEnter(State<State, string> obj)
     {
         outerGlowClickEffect?.TouchEffect();
+        outerGlowIdleEffect.StopIdleEffect();
         animation.loop = false;
         animationHandle.PlayAnimationForState("interaction2", 0);
         Managers.Sound.PlaySfx(SFX.TouchSound);
@@ -99,7 +102,9 @@ public class GrandmaCharacterController : MonoBehaviour
     private void IsPlateOnEnter(State<State, string> obj)
     {
         delay?.Kill();
+        outerGlowIdleEffect.StopIdleEffect();
         outerGlowClickEffect?.TouchEffect();
+        Managers.Sound.PlaySfx(SFX.TouchSound);
         animation.loop = false;
         animationHandle.PlayAnimationForState("idle2", 0);
         var data = animationHandle.GetAnimationForState("idle2");
@@ -111,6 +116,9 @@ public class GrandmaCharacterController : MonoBehaviour
     
     private void OnMouseEvent(Define.MouseEvent obj)
     {
+        if (!Managers.Game.lightState)
+            return;
+        
         if (obj != Define.MouseEvent.Click)
             return;
 
@@ -130,6 +138,9 @@ public class GrandmaCharacterController : MonoBehaviour
     
     private void OnHokuyoEvent(UrgTouchState state, Vector2 arg2)
     {
+        if (!Managers.Game.lightState)
+            return;
+        
         Ray ray = Managers.Game.WallCamera.ViewportPointToRay(arg2);
         RaycastHit hit;
         int layerMask = 1 << LayerMask.NameToLayer(layerName);

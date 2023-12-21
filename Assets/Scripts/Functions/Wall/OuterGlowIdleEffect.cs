@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
-using LeTai.TrueShadow;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class OuterGlowIdleEffect : MonoBehaviour
 {
@@ -10,18 +10,16 @@ public class OuterGlowIdleEffect : MonoBehaviour
     public float idleDuration = 1f;
     public float alphaMin = 0.5f;
     public float alphaMax = 0.55f;
-    public float spread = 0.85f;
     public Ease alphaEase = Ease.Linear;
 
     private CanvasGroup _canvasGroup;
-    private TrueShadow _trueShadow;
+    private Image _trueShadow;
 
     private void Awake()
     {
-        _trueShadow = GetComponentInChildren<TrueShadow>();
+        _trueShadow = GetComponentInChildren<Image>();
         _canvasGroup = GetComponent<CanvasGroup>();
         _canvasGroup.alpha = 0;
-        _trueShadow.Spread = spread;
     }
     
     public void BeginIdleEffect()
@@ -30,7 +28,6 @@ public class OuterGlowIdleEffect : MonoBehaviour
         _canvasGroup.DOFade(alphaMax, idleDuration).From(alphaMin).SetLoops(-1, LoopType.Yoyo).SetEase(alphaEase).OnStepComplete(
             () =>
             {
-                _trueShadow.Spread = spread;
             });
     }
     

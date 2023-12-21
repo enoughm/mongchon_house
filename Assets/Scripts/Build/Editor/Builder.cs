@@ -78,6 +78,7 @@ namespace KHJ
 
                 var fileName = $"{Application.productName}_{_buildDate}.{fileExtension}";
                 outputFile = string.Format("{0}/{1}", _outputPath, fileName);
+                Debug.LogFormat("**** outputFile : {0}", outputFile);
 
                 BuildPlayerOptions buildPlayerOptions = new BuildPlayerOptions();
                 buildPlayerOptions.scenes = BuildSupport.FindEnableScenes();
