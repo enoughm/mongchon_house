@@ -4,6 +4,7 @@ using Spine.Unity;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 public class Chaser : MonoBehaviour
 {
@@ -327,6 +328,8 @@ public class Chaser : MonoBehaviour
 
     #region State_Chasing
     Vector3 closeStepInChasing;
+    private float chasingTime = 0;
+    private float maxChasingTime = 6;
     private void Enter_Chasing()
     {
         _navMeshAgent.speed = chasingSpeed;
@@ -342,7 +345,8 @@ public class Chaser : MonoBehaviour
             SetState(State.Waiting);
             return;
         }
-        
+
+        chasingTime = 0;
         closeStepInChasing = close.position;
         _navMeshAgent.ResetPath();
         chasingCacluationSuccess = _navMeshAgent.SetDestination(closeStepInChasing);
@@ -368,6 +372,17 @@ public class Chaser : MonoBehaviour
 
         if (dis > chasingMaxDistance)
         {
+            _navMeshAgent.ResetPath();
+            Debug.Log("Chasing Success");
+            SetState(State.Waiting);
+            return;
+        }
+        
+        chasingTime += Time.deltaTime;
+        
+        if(chasingTime > maxChasingTime)
+        {
+            chasingTime = 0;
             _navMeshAgent.ResetPath();
             Debug.Log("Chasing Success");
             SetState(State.Waiting);
